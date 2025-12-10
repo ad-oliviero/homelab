@@ -1,0 +1,55 @@
+services:
+  encdav:
+    image: rclone/rclone:latest
+    restart: unless-stopped
+    user: 1000:1000
+    volumes:
+      - ./config:/config/rclone:ro
+      - /media/storage/encrypted:/data:shared
+    environment:
+      - RCLONE_SERVE_WEBDAV_USER=${ENCDAV_USER}
+      - RCLONE_SERVE_WEBDAV_PASS=${ENCDAV_PASS}
+
+    command: >
+      serve webdav
+      encdav:
+        --addr :202
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.decdav.rule: Host(`encdav.oliviero.xyz`)
+      traefik.http.routers.decdav.entrypoints: websecure
+      traefik.http.routers.decdav.tls.certresolver: production
+      traefik.http.services.decdav.loadbalancer.server.port: 202
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+  dav:
+    image: rclone/rclone:latest
+    restart: unless-stopped
+    user: 1000:1000
+    volumes:
+      - ./config:/config/rclone:ro
+      - /media/storage/data/rclone:/data:shared
+    environment:
+      - RCLONE_SERVE_WEBDAV_USER=${DAV_USER}
+      - RCLONE_SERVE_WEBDAV_PASS=${DAV_PASS}
+    command: >
+      serve webdav
+      dav:
+        --addr :80
+
+    labels:
+      traefik.enable: true
+      traefik.http.routers.dav.rule: Host(`dav.oliviero.xyz`)
+      traefik.http.routers.dav.entrypoints: websecure
+      traefik.http.routers.dav.tls.certresolver: production
+      traefik.http.services.dav.loadbalancer.server.port: 80
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
+
