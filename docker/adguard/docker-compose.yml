@@ -1,0 +1,40 @@
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    restart: unless-stopped
+    volumes:
+      - /media/storage/dbs/adguard:/opt/adguardhome/work
+      - /media/storage/data/adguard/conf:/opt/adguardhome/conf
+      - /media/storage/data/adguard/certs:/opt/certs:ro
+    labels:
+      traefik.enable: true
+      traefik.http.routers.adguard.rule: Host(`adguard.oliviero.xyz`)
+      traefik.http.routers.adguard.entrypoints: websecure
+      traefik.http.routers.adguard.tls: true
+      traefik.http.routers.adguard.service: adguard
+      traefik.http.routers.adguard.tls.certresolver: production
+      traefik.http.services.adguard.loadbalancer.server.port: 80
+
+      traefik.udp.routers.adguard-dns.entrypoints: dns
+      traefik.udp.routers.adguard-dns.service: adguard-dns
+      traefik.udp.services.adguard-dns.loadbalancer.server.port: 53
+
+      traefik.tcp.routers.adguard-dns.rule: HostSNI(`*`)
+      traefik.tcp.routers.adguard-dns.entrypoints: dnstcp
+      traefik.tcp.routers.adguard-dns.service: adguard-dns
+      traefik.tcp.services.adguard-dns.loadbalancer.server.port: 53
+
+      traefik.tcp.routers.adguard-tls.rule: HostSNI(`dns.oliviero.xyz`)
+      traefik.tcp.routers.adguard-tls.tls: true
+      traefik.tcp.routers.adguard-tls.tls.passthrough: true
+      traefik.tcp.routers.adguard-tls.entrypoints: dot
+      traefik.tcp.routers.adguard-tls.tls.certresolver: production
+      traefik.tcp.routers.adguard-tls.service: adguard-tls
+      traefik.tcp.services.adguard-tls.loadbalancer.server.port: 853
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+networks:
+  proxy-net:
+    external: true

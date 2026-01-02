@@ -1,0 +1,16 @@
+services:
+  traefik-certs-dumper:
+    image: ldez/traefik-certs-dumper:latest
+    entrypoint: sh -c '
+      while ! [ -e /data/acme.json ]
+      || ! [ `jq ".[] | .Certificates | length" /data/acme.json | jq -s "add" ` != 0 ]; do
+      sleep 1;
+      done &&
+      traefik-certs-dumper file --version v3 --watch
+      --source /data/acme.json --dest /dumper --domain-subdir;
+      cp -r /dumper/dns.oliviero.xyz /adguard'
+    volumes:
+      - /media/storage/data/traefik/letsencrypt:/data:ro
+      - /media/storage/data/traefik/dumper:/dumper
+      - /media/storage/data/adguard/certs:/adguard
+    network_mode: none
