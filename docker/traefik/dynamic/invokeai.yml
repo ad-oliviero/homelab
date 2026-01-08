@@ -1,0 +1,17 @@
+http:
+  routers:
+    invoke:
+      rule: "Host(`invoke.oliviero.xyz`)"
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: production
+      service: invoke
+
+  services:
+    invoke:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://192.168.1.121:9090"
+
