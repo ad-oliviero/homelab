@@ -1,0 +1,11 @@
+services:
+  invokeai:
+    image: ghcr.io/invoke-ai/invokeai:main-rocm
+    devices:
+      - /dev/dri
+      - /dev/kfd
+    volumes:
+      - /home/adri/.local/opt/invokeai:/invokeai
+    ports:
+      - 9090:9090
+    restart: unless-stopped
