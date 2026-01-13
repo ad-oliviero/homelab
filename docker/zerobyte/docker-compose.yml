@@ -1,0 +1,30 @@
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:v0.22
+    container_name: zerobyte
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    environment:
+      - TZ=Europe/Rome
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /media/storage/dbs/zerobyte:/var/lib/zerobyte
+      - /media/storage/dbs/zerobyte:/var/lib/zerobyte
+      - ./restored:/restored
+      - /media/storage/data/syncthing:/syncthing
+    labels:
+      traefik.enable: true
+      traefik.http.routers.zerobyte.rule: Host(`zb.oliviero.xyz`)
+      traefik.http.routers.zerobyte.entrypoints: websecure
+      traefik.http.routers.zerobyte.tls.certresolver: production
+      traefik.http.services.zerobyte.loadbalancer.server.port: 4096
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
