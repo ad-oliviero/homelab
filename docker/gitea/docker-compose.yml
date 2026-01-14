@@ -1,0 +1,30 @@
+services:
+  server:
+    image: docker.io/gitea/gitea:latest
+    container_name: gitea
+    environment:
+      - SSH_PORT=222
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    volumes:
+      - /media/storage/data/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      traefik.enable: true
+      traefik.http.routers.gitea.rule: Host(`git.oliviero.xyz`)
+      traefik.http.routers.gitea.entrypoints: websecure
+      traefik.http.routers.gitea.tls.certresolver: production
+      traefik.http.services.gitea.loadbalancer.server.port: 3000
+      traefik.docker.network: proxy_net
+
+      traefik.tcp.routers.gitea.entrypoints: git
+      traefik.tcp.routers.gitea.rule: HostSNI(`*`)
+      traefik.tcp.services.gitea.loadbalancer.server.port: 222
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true

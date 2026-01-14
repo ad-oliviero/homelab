@@ -12,7 +12,6 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /media/storage/dbs/zerobyte:/var/lib/zerobyte
-      - /media/storage/dbs/zerobyte:/var/lib/zerobyte
       - ./restored:/restored
       - /media/storage/data/syncthing:/syncthing
     labels:
