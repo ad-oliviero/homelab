@@ -1,9 +1,16 @@
 services:
   invokeai:
     image: ghcr.io/invoke-ai/invokeai:main-rocm
+    environment:
+      - HSA_OVERRIDE_GFX_VERSION=10.3.0
+      - PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
     devices:
       - /dev/dri
       - /dev/kfd
+    security_opt:
+      - seccomp:unconfined
+    group_add:
+      - video
     volumes:
       - /home/adri/.local/opt/invokeai:/invokeai
     ports:
