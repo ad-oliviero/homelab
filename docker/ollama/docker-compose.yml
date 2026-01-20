@@ -1,0 +1,23 @@
+include:
+  - webui.yml
+
+services:
+  ollama:
+    image: ollama/ollama:rocm
+    restart: unless-stopped
+    volumes:
+      - ./ollama:/root/.ollama
+    devices:
+      - /dev/dri
+      - /dev/kfd
+    environment:
+      - HSA_OVERRIDE_GFX_VERSION=10.3.0
+      - PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
+    security_opt:
+      - seccomp:unconfined
+    group_add:
+      - video
+    ports:
+      - 11434:11434
+    pull_policy: always
+    tty: true
