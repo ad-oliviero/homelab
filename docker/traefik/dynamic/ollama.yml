@@ -1,0 +1,30 @@
+http:
+  routers:
+    ollama:
+      rule: "Host(`ollama.oliviero.xyz`)"
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: production
+      service: ollama
+    webui:
+      rule: "Host(`webui.oliviero.xyz`)"
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: production
+      service: webui
+
+  services:
+    ollama:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://192.168.1.121:11434"
+    webui:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://192.168.1.121:3000"
+
+
