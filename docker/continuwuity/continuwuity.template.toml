@@ -1,0 +1,31 @@
+[global]
+server_name = "matrix.${BASE_DOMAIN}"
+address = "0.0.0.0"
+port = 6167
+database_path = "/var/lib/continuwuity"
+allow_registration = true
+allow_federation = true
+trusted_servers = ["matrix.org"]
+max_request_size = 1073741824 # 1GB
+
+allow_local_presence = true
+allow_incoming_presence = true
+allow_outgoing_presence = true
+
+allow_local_typing = true
+allow_outgoing_typing = true
+allow_incoming_typing = true
+
+require_auth_for_profile_requests = true
+
+cache_capacity_modifier = 1.5
+
+auto_join_rooms = ["#welcome:matrix.${BASE_DOMAIN}"]
+
+[global.well_known]
+client = "https://matrix.${BASE_DOMAIN}"
+server = "matrix.${BASE_DOMAIN}:443"
+
+rtc_focus_server_urls = [
+    { type = "livekit", livekit_service_url = "https://livekit.${BASE_DOMAIN}" }
+]

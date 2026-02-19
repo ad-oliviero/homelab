@@ -1,0 +1,50 @@
+{
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "https://matrix.${BASE_DOMAIN}"
+    },
+    "m.identity_server": {
+      "base_url": "https://vector.im"
+    }
+  },
+  "brand": "${SERVER_BRAND}",
+
+  "disable_guests": true,
+  "disable_3pid_login": false,
+
+  "features": {
+    "feature_thread": true,
+    "feature_video_rooms": true,
+    "feature_group_calls": true,
+    "feature_element_call_video_rooms": true,
+    "feature_spotlight": true,
+    "feature_latex_maths": true,
+    "feature_oidc_native_flow": true
+  },
+
+  "default_theme": "dark",
+
+  "setting_defaults": {
+    "ThreadsActivityEnabled": true,
+    "feature_thread": true,
+    "feature_video_rooms": true,
+    "feature_group_calls": true,
+    "feature_element_call_video_rooms": true,
+    "feature_spotlight": true,
+    "feature_latex_maths": true,
+    "theme": "dark",
+    "Spaces.showVideoRooms": true,
+    "automaticErrorReporting": false,
+    "enableSyntaxHighlightLanguageDetection": true
+  },
+
+  "room_directory": {
+    "servers": ["matrix.${BASE_DOMAIN}"]
+  },
+
+  "element_call": {
+    "url": "https://call.${BASE_DOMAIN}",
+    "use_exclusively": true,
+    "brand": "${SERVER_BRAND} Live"
+  }
+}
