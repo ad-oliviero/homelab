@@ -13,5 +13,5 @@ http:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.121:9090"
+          - url: "http://192.168.1.120:9090"
 

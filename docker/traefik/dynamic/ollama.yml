@@ -34,12 +34,12 @@ http:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.121:11434"
+          - url: "http://192.168.1.120:11434"
     webui:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.121:3000"
+          - url: "http://192.168.1.120:3000"
     srvollama:
       loadBalancer:
         passHostHeader: true
