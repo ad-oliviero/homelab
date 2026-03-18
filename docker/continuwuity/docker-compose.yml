@@ -1,0 +1,108 @@
+services:
+  continuwuity:
+    image: forgejo.ellis.link/continuwuation/continuwuity:latest
+    restart: unless-stopped
+    volumes:
+      - /media/storage/data/continuwuity:/var/lib/continuwuity
+      - ./generated/continuwuity.toml:/etc/continuwuity.toml
+    labels:
+      traefik.enable: true
+      traefik.http.routers.continuwuity.rule: Host(`matrix.${BASE_DOMAIN}`)
+      traefik.http.routers.continuwuity.entrypoints: websecure
+      traefik.http.routers.continuwuity.tls: true
+      traefik.http.routers.continuwuity.service: continuwuity
+      traefik.http.routers.continuwuity.tls.certresolver: production
+      traefik.http.services.continuwuity.loadbalancer.server.port: 6167
+      traefik.http.middlewares.compression.compress: true
+      traefik.http.routers.continuwuity.middlewares: compression@docker
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+    environment:
+      CONTINUWUITY_ALLOW_CHECK_FOR_UPDATES: 'true'
+      CONDUWUIT_USER_DIRECTORY__SEARCH_ALL_USERS: true
+      CONTINUWUITY_CONFIG: '/etc/continuwuity.toml'
+    ulimits:
+      nofile:
+        soft: 1048567
+        hard: 1048567
+
+  element-web:
+    image: vectorim/element-web:latest
+    restart: unless-stopped
+    volumes:
+        - ./generated/element_config.json:/app/config.json
+    depends_on:
+        - continuwuity
+    labels:
+      traefik.enable: true
+      traefik.http.routers.element.rule: Host(`element.${BASE_DOMAIN}`)
+      traefik.http.routers.element.entrypoints: websecure
+      traefik.http.routers.element.tls.certresolver: production
+      traefik.http.services.element.loadbalancer.server.port: 80
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+  livekit:
+    image: livekit/livekit-server:latest
+    command: --config /etc/livekit.yaml
+    restart: unless-stopped
+    volumes:
+      - ./generated/livekit.yaml:/etc/livekit.yaml
+    ports:
+      - "7881:7881"
+      - "50100-50200:50100-50200/udp"
+    networks:
+      - proxy-net
+    labels:
+      traefik.enable: true
+      traefik.http.routers.livekit.rule: Host(`livekit.${BASE_DOMAIN}`)
+      traefik.http.routers.livekit.entrypoints: websecure
+      traefik.http.routers.livekit.tls.certresolver: production
+      traefik.http.services.livekit.loadbalancer.server.port: 7880
+  lk-jwt-service:
+    image: ghcr.io/element-hq/lk-jwt-service:latest
+    restart: unless-stopped
+    environment:
+      - LIVEKIT_URL=wss://livekit.${BASE_DOMAIN}
+      - LIVEKIT_KEY=${LIVEKIT_KEY}
+      - LIVEKIT_SECRET=${LIVEKIT_SECRET}
+      - LIVEKIT_FULL_ACCESS_HOMESERVERS=matrix.${BASE_DOMAIN}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.livekit-jwt.rule: Host(`livekit.${BASE_DOMAIN}`) && (PathPrefix(`/sfu/get`) || PathPrefix(`/healthz`) || PathPrefix(`/get_token`))
+      traefik.http.routers.livekit-jwt.entrypoints: websecure
+      traefik.http.routers.livekit-jwt.tls.certresolver: production
+      traefik.http.services.livekit-jwt.loadbalancer.server.port: 8080
+    networks:
+      - proxy-net
+
+  element-call:
+    image: ghcr.io/element-hq/element-call:latest
+    restart: unless-stopped
+    environment:
+      PUBLIC_URL: "https://call.${BASE_DOMAIN}"
+      LIVEKIT_URL: "wss://livekit.${BASE_DOMAIN}"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.call.rule: Host(`call.${BASE_DOMAIN}`)
+      traefik.http.routers.call.entrypoints: websecure
+      traefik.http.routers.call.tls.certresolver: production
+      traefik.http.services.call.loadbalancer.server.port: 8080
+    networks:
+      - proxy-net
+  coturn:
+    image: coturn/coturn:latest
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - ./generated/coturn.conf:/etc/coturn/turnserver.conf
+    command:
+      - -n
+      - --log-file=stdout
+      - --static-auth-secret=${COTURN_AUTH_SECRET}
+
+networks:
+  proxy-net:
+    external: true

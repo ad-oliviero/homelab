@@ -1,0 +1,21 @@
+port: 7880
+bind_addresses:
+  - ""
+rtc:
+  tcp_port: 7881
+  port_range_start: 50100
+  port_range_end: 50200
+  node_ip: "${PUBLIC_IP}"
+  use_external_ip: true
+  turn_servers:
+    - host: "turn.${BASE_DOMAIN}"
+      port: 3478
+      protocol: udp
+      secret: "${COTURN_AUTH_SECRET}"
+    - host: "turn.${BASE_DOMAIN}"
+      port: 3478
+      protocol: tcp
+      secret: "${COTURN_AUTH_SECRET}"
+
+keys:
+  ${LIVEKIT_KEY}: ${LIVEKIT_SECRET}

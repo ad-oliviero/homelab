@@ -1,17 +1,17 @@
 http:
   routers:
-    comfyui:
-      rule: "Host(`comfyui.oliviero.xyz`)"
+    adguard:
+      rule: "Host(`adguard.oliviero.xyz`)"
       entryPoints:
         - websecure
       tls:
         certresolver: production
-      service: comfyui
+      service: adguard
 
   services:
-    comfyui:
+    adguard:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.120:8188"
+          - url: "http://10.0.0.1:3000"
 

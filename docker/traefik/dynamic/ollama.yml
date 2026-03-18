@@ -14,17 +14,41 @@ http:
       tls:
         certresolver: production
       service: webui
+    srvollama:
+      rule: "Host(`srvollama.oliviero.xyz`)"
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: production
+      service: srvollama
+    srvwebui:
+      rule: "Host(`srvwebui.oliviero.xyz`)"
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: production
+      service: srvwebui
 
   services:
     ollama:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.121:11434"
+          - url: "http://192.168.1.120:11434"
     webui:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.121:3000"
+          - url: "http://192.168.1.120:3000"
+    srvollama:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://100.111.1.2:11434"
+    srvwebui:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://100.111.1.2:3000"
 
 
