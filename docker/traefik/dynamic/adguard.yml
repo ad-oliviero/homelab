@@ -1,0 +1,17 @@
+http:
+  routers:
+    adguard:
+      rule: "Host(`adguard.oliviero.xyz`)"
+      entryPoints:
+        - websecure
+      tls:
+        certresolver: production
+      service: adguard
+
+  services:
+    adguard:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://10.0.0.1:3000"
+
