@@ -8,9 +8,7 @@ services:
     ports:
       - 3000:8080
     environment:
-      - "OLLAMA_BASE_URL=http://ollama:11434"
-      - "ENABLE_API_KEYS=True"
-      - "ENABLE_API_KEY=True"
+      - OLLAMA_BASE_URL=http://ollama:11434
       - AIOHTTP_CLIENT_TIMEOUT=6000
       - WEBUI_TIMEOUT=6000
     extra_hosts:
