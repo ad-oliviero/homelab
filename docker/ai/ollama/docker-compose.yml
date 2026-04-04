@@ -1,12 +1,9 @@
-include:
-  - webui.yml
-
 services:
   ollama:
-    image: ollama/ollama:0.18.2-rocm
+    image: ollama/ollama:rocm
     restart: unless-stopped
     volumes:
-      - ./ollama:/root/.ollama
+      - ./data:/root/.ollama
     devices:
       - /dev/dri
       - /dev/kfd
