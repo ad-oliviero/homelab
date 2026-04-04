@@ -1,17 +1,16 @@
 http:
   routers:
-    invoke:
-      rule: "Host(`invoke.oliviero.xyz`)"
+    haos:
+      rule: "Host(`haos.oliviero.xyz`)"
       entryPoints:
         - websecure
       tls:
         certresolver: production
-      service: invoke
+      service: haos
 
   services:
-    invoke:
+    haos:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.120:9090"
-
+          - url: "http://172.17.0.1:8123"
