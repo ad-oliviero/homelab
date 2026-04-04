@@ -24,6 +24,8 @@ services:
       - cf_dns_token
       - cf_zone_token
       - basic_auth_users
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command:
       - "--log.level=INFO"
       # - "--api.insecure=true"
