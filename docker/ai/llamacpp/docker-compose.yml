@@ -1,0 +1,30 @@
+services:
+  llamacpp:
+    image: ghcr.io/ggml-org/llama.cpp:server-rocm
+    restart: unless-stopped
+    ipc: host
+    shm_size: '16gb'
+    volumes:
+      - ./data:/models
+    devices:
+      - /dev/dri
+      - /dev/kfd
+    environment:
+      - HSA_OVERRIDE_GFX_VERSION=10.3.0
+      - HSA_ENABLE_SDMA=0
+      - HSA_DISABLE_FRAGMENT_ALLOCATOR=1
+    security_opt:
+      - seccomp:unconfined
+    group_add:
+      - video
+    ports:
+      - 8080:8080
+    pull_policy: always
+    tty: true
+    command: >
+      --models-dir /models
+      --host 0.0.0.0
+      --port 8080
+      --parallel 1
+      --models-max 1
+      --timeout 300
