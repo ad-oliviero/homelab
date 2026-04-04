@@ -1,10 +1,16 @@
 services:
   copyparty:
     image: copyparty/im:latest
+    restart: always
     user: "1000:1000"
     volumes:
       - ./cpp:/cfg:z
       - /media/storage/encrypted:/w:z
+
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
 
     environment:
       LD_PRELOAD: /usr/lib/libmimalloc-secure.so
