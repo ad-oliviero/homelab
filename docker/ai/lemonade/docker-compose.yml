@@ -1,0 +1,27 @@
+services:
+  lemonade:
+    build: .
+    environment:
+      - LEMONADE_HOST=0.0.0.0
+      - LEMONADE_CTX_SIZE=8192
+      - LEMONADE_DISABLE_MODEL_FILTERING=true
+      - LEMONADE_ENABLE_DGPU_GTT=1
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+    security_opt:
+      - seccomp:unconfined
+    ipc: host
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    volumes:
+      - ./data:/root
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
