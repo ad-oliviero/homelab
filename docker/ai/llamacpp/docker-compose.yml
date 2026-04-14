@@ -1,29 +1,30 @@
-include:
-  - webui.yml
-
 services:
-  ollama:
-    image: ollama/ollama:rocm
+  llamacpp:
+    image: ghcr.io/ggml-org/llama.cpp:server-rocm
     restart: unless-stopped
-    privileged: true
+    ipc: host
+    shm_size: '16gb'
     volumes:
-      - ./ollama:/root/.ollama
+      - ./data:/models
     devices:
       - /dev/dri
       - /dev/kfd
     environment:
       - HSA_OVERRIDE_GFX_VERSION=10.3.0
-      - PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
-      - OLLAMA_CONTEXT_LENGTH=16384
       - HSA_ENABLE_SDMA=0
       - HSA_DISABLE_FRAGMENT_ALLOCATOR=1
-      - OLLAMA_KV_CACHE_TYPE=q8_0
-      - OLLAMA_KEEP_ALIVE=0
     security_opt:
       - seccomp:unconfined
     group_add:
       - video
     ports:
-      - 11434:11434
+      - 8080:8080
     pull_policy: always
     tty: true
+    command: >
+      --models-dir /models
+      --host 0.0.0.0
+      --port 8080
+      --parallel 1
+      --models-max 1
+      --timeout 300

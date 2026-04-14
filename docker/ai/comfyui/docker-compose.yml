@@ -3,10 +3,12 @@ services:
     build: .
     environment:
       - HSA_OVERRIDE_GFX_VERSION=10.3.0 
-      - PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
-      - CLI_ARGS=--preview-method taesd --lowvram --fp8_e4m3fn-unet --fp8_e4m3fn-text-enc --force-fp16
       - HSA_DISABLE_FRAGMENT_ALLOCATOR=1
-      # - HSA_ENABLE_SDMA=0
+      - HSA_ENABLE_SDMA=0
+      - PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128,expandable_segments:True
+      - PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128,expandable_segments:True
+      - PYTORCH_ROCM_ARCH=gfx1032
+      - CLI_ARGS=--lowvram --force-fp16 --use-split-cross-attention
     devices:
       - /dev/kfd:/dev/kfd
       - /dev/dri:/dev/dri

@@ -1,0 +1,13 @@
+[Unit]
+Description=HAOS VM
+After=network.target
+
+[Service]
+Type=simple
+User=adri
+ExecStart=/home/adri/homelab/kvm/haos/run.sh
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
