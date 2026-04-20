@@ -4,7 +4,7 @@ secrets:
 
 services:
   garage:
-    image: dxflrs/garage:v2.1.0
+    image: dxflrs/garage:v2.2.0
     restart: unless-stopped
     secrets:
       - rpc_secret
