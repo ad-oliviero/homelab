@@ -20,7 +20,7 @@ services:
       traefik.enable: true
       traefik.http.routers.immich.rule: Host(`immich.oliviero.xyz`)
       traefik.http.routers.immich.entrypoints: websecure
-      traefik.http.routers.immich.tls.certresolver: production
+      traefik.http.routers.immich.tls: true
       traefik.http.services.immich.loadbalancer.server.port: 2283
       traefik.docker.network: proxy-net
     hostname: immich

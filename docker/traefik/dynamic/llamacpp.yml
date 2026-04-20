@@ -1,16 +1,15 @@
 http:
   routers:
-    comfyui:
-      rule: "Host(`comfyui.oliviero.xyz`)"
+    llamacpp:
+      rule: "Host(`llamacpp.oliviero.xyz`)"
       entryPoints:
         - websecure
       tls: true
-      service: comfyui
+      service: llamacpp
 
   services:
-    comfyui:
+    llamacpp:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.120:8188"
-
+          - url: "http://192.168.1.120:8080"

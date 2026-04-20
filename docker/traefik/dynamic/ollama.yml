@@ -4,15 +4,13 @@ http:
       rule: "Host(`ollama.oliviero.xyz`)"
       entryPoints:
         - websecure
-      tls:
-        certresolver: production
+      tls: true
       service: ollama
     webui:
       rule: "Host(`webui.oliviero.xyz`)"
       entryPoints:
         - websecure
-      tls:
-        certresolver: production
+      tls: true
       service: webui
 
   services:

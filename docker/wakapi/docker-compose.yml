@@ -27,7 +27,7 @@ services:
       traefik.enable: true
       traefik.http.routers.wakapi.rule: Host(`wakapi.oliviero.xyz`)
       traefik.http.routers.wakapi.entrypoints: websecure
-      traefik.http.routers.wakapi.tls.certresolver: production
+      traefik.http.routers.wakapi.tls: true
       traefik.http.services.wakapi.loadbalancer.server.port: 3000
     networks:
       - proxy-net

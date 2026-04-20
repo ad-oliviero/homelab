@@ -9,9 +9,9 @@ services:
       traefik.enable: true
       traefik.http.routers.librespeed.rule: Host(`librespeed.oliviero.xyz`)
       traefik.http.routers.librespeed.entrypoints: websecure
-      traefik.http.routers.librespeed.tls.certresolver: production
+      traefik.http.routers.librespeed.tls: true
       traefik.http.services.librespeed.loadbalancer.server.port: 8080
-      traefik.docker.network: proxy_net
+      traefik.docker.network: proxy-net
     networks:
       - proxy-net
 

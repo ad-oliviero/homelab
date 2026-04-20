@@ -15,7 +15,7 @@ services:
       traefik.enable: true
       traefik.http.routers.gitea.rule: Host(`git.oliviero.xyz`)
       traefik.http.routers.gitea.entrypoints: websecure
-      traefik.http.routers.gitea.tls.certresolver: production
+      traefik.http.routers.gitea.tls: true
       traefik.http.services.gitea.loadbalancer.server.port: 3000
       traefik.docker.network: proxy-net
 

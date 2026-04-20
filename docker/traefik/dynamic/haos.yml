@@ -4,8 +4,7 @@ http:
       rule: "Host(`haos.oliviero.xyz`)"
       entryPoints:
         - websecure
-      tls:
-        certresolver: production
+      tls: true
       service: haos
 
   services:

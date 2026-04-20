@@ -27,7 +27,7 @@ services:
       traefik.enable: true
       traefik.http.routers.bitmagnet.rule: Host(`bitmagnet.oliviero.xyz`)
       traefik.http.routers.bitmagnet.entrypoints: websecure
-      traefik.http.routers.bitmagnet.tls.certresolver: production
+      traefik.http.routers.bitmagnet.tls: true
       traefik.http.services.bitmagnet.loadbalancer.server.port: 3333
       traefik.docker.network: proxy-net
     networks:

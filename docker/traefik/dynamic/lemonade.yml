@@ -1,16 +1,15 @@
 http:
   routers:
-    comfyui:
-      rule: "Host(`comfyui.oliviero.xyz`)"
+    lemonade:
+      rule: "Host(`lemonade.oliviero.xyz`)"
       entryPoints:
         - websecure
       tls: true
-      service: comfyui
+      service: lemonade
 
   services:
-    comfyui:
+    lemonade:
       loadBalancer:
         passHostHeader: true
         servers:
-          - url: "http://192.168.1.120:8188"
-
+          - url: "http://192.168.1.120:8000"

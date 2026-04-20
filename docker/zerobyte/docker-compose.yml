@@ -23,7 +23,7 @@ services:
       traefik.enable: true
       traefik.http.routers.zerobyte.rule: Host(`zb.oliviero.xyz`)
       traefik.http.routers.zerobyte.entrypoints: websecure
-      traefik.http.routers.zerobyte.tls.certresolver: production
+      traefik.http.routers.zerobyte.tls: true
       traefik.http.services.zerobyte.loadbalancer.server.port: 4096
       traefik.docker.network: proxy-net
     networks:

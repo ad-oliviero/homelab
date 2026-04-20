@@ -19,13 +19,12 @@ services:
       traefik.http.routers.garage.service: garage
       traefik.http.routers.garage.rule: Host(`s3.oliviero.xyz`)
       traefik.http.routers.garage.entrypoints: websecure
-      traefik.http.routers.garage.tls.certresolver: production
+      traefik.http.routers.garage.tls: true
       traefik.http.services.garage.loadbalancer.server.port: 3900
 
       traefik.http.routers.garage-web.service: garage-web
       traefik.http.routers.garage-web.rule: Host(`garage.oliviero.xyz`)
       traefik.http.routers.garage-web.entrypoints: websecure
-      traefik.http.routers.garage-web.tls.certresolver: production
       traefik.http.routers.garage-web.tls: true
       traefik.http.services.garage-web.loadbalancer.server.port: 3902
       traefik.http.routers.garage-web.middlewares: compression

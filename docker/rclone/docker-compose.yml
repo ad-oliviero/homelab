@@ -19,7 +19,7 @@ services:
       traefik.enable: true
       traefik.http.routers.decdav.rule: Host(`encdav.oliviero.xyz`)
       traefik.http.routers.decdav.entrypoints: websecure
-      traefik.http.routers.decdav.tls.certresolver: production
+      traefik.http.routers.decdav.tls: true
       traefik.http.services.decdav.loadbalancer.server.port: 202
       traefik.docker.network: proxy-net
     networks:
@@ -43,7 +43,7 @@ services:
       traefik.enable: true
       traefik.http.routers.dav.rule: Host(`dav.oliviero.xyz`)
       traefik.http.routers.dav.entrypoints: websecure
-      traefik.http.routers.dav.tls.certresolver: production
+      traefik.http.routers.dav.tls: true
       traefik.http.services.dav.loadbalancer.server.port: 80
       traefik.docker.network: proxy-net
     networks:

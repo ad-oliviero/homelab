@@ -11,7 +11,6 @@ services:
       traefik.http.routers.continuwuity.entrypoints: websecure
       traefik.http.routers.continuwuity.tls: true
       traefik.http.routers.continuwuity.service: continuwuity
-      traefik.http.routers.continuwuity.tls.certresolver: production
       traefik.http.services.continuwuity.loadbalancer.server.port: 6167
       traefik.http.middlewares.compression.compress: true
       traefik.http.routers.continuwuity.middlewares: compression@docker
@@ -38,7 +37,7 @@ services:
       traefik.enable: true
       traefik.http.routers.element.rule: Host(`element.${BASE_DOMAIN}`)
       traefik.http.routers.element.entrypoints: websecure
-      traefik.http.routers.element.tls.certresolver: production
+      traefik.http.routers.element.tls: true
       traefik.http.services.element.loadbalancer.server.port: 80
       traefik.docker.network: proxy-net
     networks:
@@ -59,7 +58,7 @@ services:
       traefik.enable: true
       traefik.http.routers.livekit.rule: Host(`livekit.${BASE_DOMAIN}`)
       traefik.http.routers.livekit.entrypoints: websecure
-      traefik.http.routers.livekit.tls.certresolver: production
+      traefik.http.routers.livekit.tls: true
       traefik.http.services.livekit.loadbalancer.server.port: 7880
   lk-jwt-service:
     image: ghcr.io/element-hq/lk-jwt-service:latest
@@ -73,7 +72,7 @@ services:
       traefik.enable: true
       traefik.http.routers.livekit-jwt.rule: Host(`livekit.${BASE_DOMAIN}`) && (PathPrefix(`/sfu/get`) || PathPrefix(`/healthz`) || PathPrefix(`/get_token`))
       traefik.http.routers.livekit-jwt.entrypoints: websecure
-      traefik.http.routers.livekit-jwt.tls.certresolver: production
+      traefik.http.routers.livekit-jwt.tls: true
       traefik.http.services.livekit-jwt.loadbalancer.server.port: 8080
     networks:
       - proxy-net
@@ -88,7 +87,7 @@ services:
       traefik.enable: true
       traefik.http.routers.call.rule: Host(`call.${BASE_DOMAIN}`)
       traefik.http.routers.call.entrypoints: websecure
-      traefik.http.routers.call.tls.certresolver: production
+      traefik.http.routers.call.tls: true
       traefik.http.services.call.loadbalancer.server.port: 8080
     networks:
       - proxy-net
