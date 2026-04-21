@@ -1,0 +1,22 @@
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    restart: unless-stopped
+    environment:
+      APP_URL: https://beszel.oliviero.xyz
+    volumes:
+      - /media/storage/data/beszel/data:/beszel_data
+      - /media/storage/data/beszel/socket:/beszel_socket
+    labels:
+      traefik.enable: true
+      traefik.http.routers.beszel.rule: Host(`beszel.srv.oliviero.xyz`)
+      traefik.http.routers.beszel.entrypoints: websecure
+      traefik.http.routers.beszel.tls: true
+      traefik.http.services.beszel.loadbalancer.server.port: 8090
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
