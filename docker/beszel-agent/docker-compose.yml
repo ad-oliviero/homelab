@@ -1,0 +1,15 @@
+services:
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /media/storage/data/beszel/agent_data:/var/lib/beszel-agent
+      - /media/storage/data/beszel/socket:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/adri/.cache/beszel:/extra-filesystems/sda:ro
+    environment:
+      LISTEN: 45876
+      HUB_URL: ${HUB_URL}
+      TOKEN: ${TOKEN}
+      KEY: ${KEY}
