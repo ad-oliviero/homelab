@@ -1,0 +1,31 @@
+include:
+  - lidarr.yml
+  - sonobarr.yml
+
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    user: 1000:1000
+    restart: unless-stopped
+    environment:
+      ND_BASEURL: https://music.oliviero.xyz
+      ND_DEFAULTLANGUAGE: "it"
+      ND_DEFAULTTHEME: "Spotify-ish"
+      ND_ENABLETRANSCODINGCONFIG: true
+      ND_LASTFM_LANGUAGE: "it"
+    volumes:
+      - /media/storage/data/navidrome:/data
+      - /media/storage/data/music:/music:ro
+    labels:
+      traefik.enable: true
+      traefik.http.routers.navidrome.rule: Host(`music.oliviero.xyz`)
+      traefik.http.routers.navidrome.entrypoints: websecure
+      traefik.http.routers.navidrome.tls: true
+      traefik.http.services.navidrome.loadbalancer.server.port: 4533
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true

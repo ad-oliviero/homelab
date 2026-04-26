@@ -1,0 +1,23 @@
+services:
+  sonobarr:
+    image: ghcr.io/dodelidoo-labs/sonobarr:latest
+    env_file:
+      - .env
+    volumes:
+      - /media/storage/data/sonobarr:/sonobarr/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.sonobarr.rule: Host(`sonobarr.oliviero.xyz`)
+      traefik.http.routers.sonobarr.entrypoints: websecure
+      traefik.http.routers.sonobarr.tls: true
+      traefik.http.services.sonobarr.loadbalancer.server.port: 5000
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
+

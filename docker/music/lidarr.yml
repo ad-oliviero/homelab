@@ -1,0 +1,25 @@
+services:
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /media/storage/data/lidarr/config:/config
+      - /media/storage/data/music:/music
+      - /media/storage/data/qbittorrent/downloads:/downloads
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.lidarr.rule: Host(`lidarr.oliviero.xyz`)
+      traefik.http.routers.lidarr.entrypoints: websecure
+      traefik.http.routers.lidarr.tls: true
+      traefik.http.services.lidarr.loadbalancer.server.port: 8686
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
