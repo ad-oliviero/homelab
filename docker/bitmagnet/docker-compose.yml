@@ -31,19 +31,31 @@ services:
       traefik.http.services.bitmagnet.loadbalancer.server.port: 3333
       traefik.docker.network: proxy-net
     networks:
-      - bitmag-net
       - proxy-net
+      - default
 
   postgres:
     image: postgres:16-alpine
     volumes:
-      - /media/storage/dbs/bitmagnet:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql/data
     restart: unless-stopped
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=bitmagnet
       - PGUSER=${PGUSER}
     shm_size: 1g
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "work_mem=32MB"
+      - "-c"
+      - "maintenance_work_mem=256MB"
+      - "-c"
+      - "effective_cache_size=2GB"
+      - "-c"
+      - "max_connections=200"
     healthcheck:
       test:
         - CMD-SHELL
@@ -51,10 +63,8 @@ services:
       start_period: 20s
       interval: 10s
     networks:
-      - bitmag-net
+      - default
 
 networks:
-  bitmag-net:
-    internal: true
   proxy-net:
     external: true
