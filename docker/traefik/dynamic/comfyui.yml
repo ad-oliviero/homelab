@@ -1,7 +1,7 @@
 http:
   routers:
     comfyui:
-      rule: "Host(`comfyui.oliviero.xyz`)"
+      rule: "Host(`comfyui.{{ env "DOMAIN" }}`)"
       entryPoints:
         - websecure
       tls: true

@@ -7,7 +7,7 @@ services:
       MODE: standalone
     labels:
       traefik.enable: true
-      traefik.http.routers.librespeed.rule: Host(`librespeed.oliviero.xyz`)
+      traefik.http.routers.librespeed.rule: Host(`librespeed.${DOMAIN}`)
       traefik.http.routers.librespeed.entrypoints: websecure
       traefik.http.routers.librespeed.tls: true
       traefik.http.services.librespeed.loadbalancer.server.port: 8080

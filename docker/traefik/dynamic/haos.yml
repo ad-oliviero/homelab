@@ -1,7 +1,7 @@
 http:
   routers:
     haos:
-      rule: "Host(`haos.oliviero.xyz`)"
+      rule: "Host(`haos.{{ env "DOMAIN" }}`)"
       entryPoints:
         - websecure
       tls: true

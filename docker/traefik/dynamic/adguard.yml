@@ -1,7 +1,7 @@
 http:
   routers:
     adguard:
-      rule: "Host(`adguard.oliviero.xyz`)"
+      rule: "Host(`adguard.{{ env "DOMAIN" }}`)"
       entryPoints:
         - websecure
       tls: true

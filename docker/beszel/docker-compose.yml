@@ -3,13 +3,13 @@ services:
     image: henrygd/beszel:latest
     restart: unless-stopped
     environment:
-      APP_URL: https://beszel.oliviero.xyz
+      APP_URL: https://beszel.${DOMAIN}
     volumes:
-      - /media/storage/data/beszel/data:/beszel_data
-      - /media/storage/data/beszel/socket:/beszel_socket
+      - ${DATA_PATH}/beszel/data:/beszel_data
+      - ${DATA_PATH}/beszel/socket:/beszel_socket
     labels:
       traefik.enable: true
-      traefik.http.routers.beszel.rule: Host(`beszel.srv.oliviero.xyz`)
+      traefik.http.routers.beszel.rule: Host(`beszel.srv.${DOMAIN}`)
       traefik.http.routers.beszel.entrypoints: websecure
       traefik.http.routers.beszel.tls: true
       traefik.http.services.beszel.loadbalancer.server.port: 8090

@@ -8,8 +8,8 @@ services:
       - WEBUI_PORT=8080
       - TORRENTING_PORT=6881
     volumes:
-      - /media/storage/data/qbittorrent/config:/config
-      - /media/storage/data/qbittorrent/downloads:/downloads
+      - ${DATA_PATH}/qbittorrent/config:/config
+      - ${DATA_PATH}/qbittorrent/downloads:/downloads
     ports:
       #- 8080:8080
       - 6881:6881
@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
     labels:
       traefik.enable: true
-      traefik.http.routers.qbittorrent.rule: Host(`torrent.oliviero.xyz`)
+      traefik.http.routers.qbittorrent.rule: Host(`torrent.${DOMAIN}`)
       traefik.http.routers.qbittorrent.entrypoints: websecure
       traefik.http.routers.qbittorrent.tls: true
       traefik.http.services.qbittorrent.loadbalancer.server.port: 8080

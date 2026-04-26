@@ -6,7 +6,7 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - /media/storage/data/syncthing:/config
+      - ${DATA_PATH}/syncthing:/config
     ports:
       - 8384:8384
       - 22000:22000/tcp

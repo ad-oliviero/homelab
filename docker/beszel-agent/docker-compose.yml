@@ -4,10 +4,10 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - /media/storage/data/beszel/agent_data:/var/lib/beszel-agent
-      - /media/storage/data/beszel/socket:/beszel_socket
+      - ${DATA_PATH}/beszel/agent_data:/var/lib/beszel-agent
+      - ${DATA_PATH}/beszel/socket:/beszel_socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /home/adri/.cache/beszel:/extra-filesystems/sda:ro
+      - ${CACHE_PATH}/beszel:/extra-filesystems/sda:ro
     cap_add:
       - SYS_RAWIO
       - SYS_ADMIN

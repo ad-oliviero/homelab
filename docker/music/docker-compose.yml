@@ -8,7 +8,7 @@ services:
     user: 1000:1000
     restart: unless-stopped
     environment:
-      ND_BASEURL: https://music.oliviero.xyz
+      ND_BASEURL: https://music.${DOMAIN}
       ND_DEFAULTLANGUAGE: "it"
       ND_DEFAULTTHEME: "Spotify-ish"
       ND_ENABLETRANSCODINGCONFIG: true
@@ -17,11 +17,11 @@ services:
       ND_EXTAUTH_TRUSTEDSOURCES: 0.0.0.0/0
       ND_ENABLEUSEREDITING: false
     volumes:
-      - /media/storage/data/navidrome:/data
-      - /media/storage/data/music:/music:ro
+      - ${DATA_PATH}/navidrome:/data
+      - ${DATA_PATH}/music:/music:ro
     labels:
       traefik.enable: true
-      traefik.http.routers.navidrome.rule: Host(`music.oliviero.xyz`)
+      traefik.http.routers.navidrome.rule: Host(`music.${DOMAIN}`)
       traefik.http.routers.navidrome.entrypoints: websecure
       traefik.http.routers.navidrome.tls: true
       traefik.http.services.navidrome.loadbalancer.server.port: 4533

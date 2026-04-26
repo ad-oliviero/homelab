@@ -25,7 +25,7 @@ services:
       start_period: 15s
     labels:
       traefik.enable: true
-      traefik.http.routers.copyparty.rule: Host(`encfs.oliviero.xyz`)
+      traefik.http.routers.copyparty.rule: Host(`encfs.${DOMAIN}`)
       traefik.http.routers.copyparty.entrypoints: websecure
       traefik.http.routers.copyparty.tls: true
       traefik.http.services.copyparty.loadbalancer.server.port: 3923

@@ -1,7 +1,7 @@
 http:
   routers:
     llamacpp:
-      rule: "Host(`llamacpp.oliviero.xyz`)"
+      rule: "Host(`llamacpp.{{ env "DOMAIN" }}`)"
       entryPoints:
         - websecure
       tls: true

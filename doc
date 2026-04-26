@@ -1,0 +1,16 @@
+#!/bin/env bash
+
+set -a
+if [ -f "$PWD/.env" ]; then
+  source "$PWD/.env"
+else
+  printf "Failed to load $PWD/.env!\n"
+  set +a
+  exit 1
+fi
+
+
+set +a
+
+sudo -E docker "$@"
+

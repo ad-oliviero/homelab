@@ -1,5 +1,5 @@
 [global]
-server_name = "matrix.${BASE_DOMAIN}"
+server_name = "matrix.${DOMAIN}"
 address = "0.0.0.0"
 port = 6167
 database_path = "/var/lib/continuwuity"
@@ -20,12 +20,12 @@ require_auth_for_profile_requests = true
 
 cache_capacity_modifier = 1.5
 
-auto_join_rooms = ["#welcome:matrix.${BASE_DOMAIN}"]
+auto_join_rooms = ["#welcome:matrix.${DOMAIN}"]
 
 [global.well_known]
-client = "https://matrix.${BASE_DOMAIN}"
-server = "matrix.${BASE_DOMAIN}:443"
+client = "https://matrix.${DOMAIN}"
+server = "matrix.${DOMAIN}:443"
 
 rtc_focus_server_urls = [
-    { type = "livekit", livekit_service_url = "https://livekit.${BASE_DOMAIN}" }
+    { type = "livekit", livekit_service_url = "https://livekit.${DOMAIN}" }
 ]

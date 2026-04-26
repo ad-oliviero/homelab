@@ -12,20 +12,19 @@ services:
       - BITMAGNET_HTTP_SERVER_ADDR=:3333
     #      - TMDB_API_KEY=your_api_key
     volumes:
-      - /media/storage/data/bitmagnet:/root/.config/bitmagnet
+      - ${DATA_PATH}/bitmagnet:/root/.config/bitmagnet
     command:
       - worker
       - run
       - --keys=http_server
       - --keys=queue_server
-      # disable the next line to run without DHT crawler
       - --keys=dht_crawler
     depends_on:
       postgres:
         condition: service_healthy
     labels:
       traefik.enable: true
-      traefik.http.routers.bitmagnet.rule: Host(`bitmagnet.oliviero.xyz`)
+      traefik.http.routers.bitmagnet.rule: Host(`bitmagnet.${DOMAIN}`)
       traefik.http.routers.bitmagnet.entrypoints: websecure
       traefik.http.routers.bitmagnet.tls: true
       traefik.http.services.bitmagnet.loadbalancer.server.port: 3333

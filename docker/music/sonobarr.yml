@@ -4,12 +4,12 @@ services:
     env_file:
       - .env
     volumes:
-      - /media/storage/data/sonobarr:/sonobarr/config
+      - ${DATA_PATH}/sonobarr:/sonobarr/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     labels:
       traefik.enable: true
-      traefik.http.routers.sonobarr.rule: Host(`sonobarr.oliviero.xyz`)
+      traefik.http.routers.sonobarr.rule: Host(`sonobarr.${DOMAIN}`)
       traefik.http.routers.sonobarr.entrypoints: websecure
       traefik.http.routers.sonobarr.tls: true
       traefik.http.services.sonobarr.loadbalancer.server.port: 5000

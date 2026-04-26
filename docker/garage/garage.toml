@@ -13,9 +13,9 @@ rpc_public_addr = "localhost:3901"
 [s3_api]
 s3_region = "garage"
 api_bind_addr = "[::]:3900"
-root_domain = "s3.oliviero.xyz"
+root_domain = "s3.${DOMAIN}"
 
 [s3_web]
 bind_addr = "[::]:3902"
-root_domain = "garage.oliviero.xyz"
+root_domain = "garage.${DOMAIN}"
 index = "index.html"

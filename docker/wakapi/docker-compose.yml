@@ -25,13 +25,13 @@ services:
       - db_password
     labels:
       traefik.enable: true
-      traefik.http.routers.wakapi.rule: Host(`wakapi.oliviero.xyz`)
+      traefik.http.routers.wakapi.rule: Host(`wakapi.${DOMAIN}`)
       traefik.http.routers.wakapi.entrypoints: websecure
       traefik.http.routers.wakapi.tls: true
       traefik.http.services.wakapi.loadbalancer.server.port: 3000
     networks:
       - proxy-net
-      - wakapi-net
+      - default
 
   db:
     image: postgres:17
@@ -41,14 +41,10 @@ services:
       POSTGRES_PASSWORD_FILE: "/run/secrets/db_password"
       POSTGRES_DB: "wakapi"
     volumes:
-      - /media/storage/dbs/wakapi:/var/lib/postgresql/data
+      - ${DBS_PATH}/wakapi:/var/lib/postgresql/data
     secrets:
       - db_password
-    networks:
-      - wakapi-net
 
 networks:
-  wakapi-net:
-    internal: true
   proxy-net:
     external: true

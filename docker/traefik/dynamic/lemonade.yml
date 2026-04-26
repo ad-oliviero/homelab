@@ -1,7 +1,7 @@
 http:
   routers:
     lemonade:
-      rule: "Host(`lemonade.oliviero.xyz`)"
+      rule: "Host(`lemonade.{{ env "DOMAIN" }}`)"
       entryPoints:
         - websecure
       tls: true

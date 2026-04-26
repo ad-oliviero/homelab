@@ -40,8 +40,8 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entryPoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.websecure.http.tls.certresolver=production"
-      - "--entrypoints.websecure.http.tls.domains[0].main=oliviero.xyz"
-      - "--entrypoints.websecure.http.tls.domains[0].sans=*.oliviero.xyz"
+      - "--entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}"
+      - "--entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}"
       - "--entrypoints.git.address=:222"
       # - "--entrypoints.dnstcp.address=:53"
       # - "--entrypoints.dnsudp.address=:53"
@@ -68,19 +68,20 @@ services:
       # - CF_API_KEY=${CF_API_KEY}
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_dns_token
       - CF_ZONE_API_TOKEN_FILE=/run/secrets/cf_zone_token
+      - DOMAIN=${DOMAIN}
       # - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
       # - CF_ZONE_API_TOKEN=${CF_ZONE_API_TOKEN}
     volumes:
-      - /media/storage/data/traefik/letsencrypt:/letsencrypt
+      - ${DATA_PATH}/traefik/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./dynamic:/etc/traefik/dynamic
     labels:
       traefik.enable: true
-      traefik.http.routers.api.rule: Host(`tf.oliviero.xyz`)
+      traefik.http.routers.api.rule: Host(`tf.${DOMAIN}`)
       traefik.http.routers.api.entrypoints: websecure
       traefik.http.routers.api.tls.certresolver: production
-      traefik.http.routers.api.tls.domains[0].main: "oliviero.xyz"
-      traefik.http.routers.api.tls.domains[0].sans: "*.oliviero.xyz"
+      traefik.http.routers.api.tls.domains[0].main: "${DOMAIN}"
+      traefik.http.routers.api.tls.domains[0].sans: "*.${DOMAIN}"
       traefik.http.routers.api.service: api@internal
       traefik.http.routers.api.middlewares: auth
       traefik.http.middlewares.auth.basicauth.usersFile: /run/secrets/basic_auth_users

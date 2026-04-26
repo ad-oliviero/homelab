@@ -1,13 +1,13 @@
 http:
   routers:
     ollama:
-      rule: "Host(`ollama.oliviero.xyz`)"
+      rule: "Host(`ollama.{{ env "DOMAIN" }}`)"
       entryPoints:
         - websecure
       tls: true
       service: ollama
     webui:
-      rule: "Host(`webui.oliviero.xyz`)"
+      rule: "Host(`webui.{{ env "DOMAIN" }}`)"
       entryPoints:
         - websecure
       tls: true
