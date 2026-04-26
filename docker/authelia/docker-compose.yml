@@ -1,0 +1,45 @@
+secrets:
+  jwt_secret:
+    file: ./secrets/jwt_secret
+  session_secret:
+    file: ./secrets/session_secret
+  storage_password:
+    file: ./secrets/storage_password
+  storage_encryption_key:
+    file: ./secrets/storage_encryption_key
+
+services:
+  authelia:
+    image: docker.io/authelia/authelia:latest
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    secrets:
+      - jwt_secret
+      - session_secret
+      - storage_password
+      - storage_encryption_key
+    environment:
+      X_AUTHELIA_CONFIG_FILTERS: 'template'
+      AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE: '/run/secrets/jwt_secret'
+      AUTHELIA_SESSION_SECRET_FILE: '/run/secrets/session_secret'
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: '/run/secrets/storage_encryption_key'
+      TZ: 'Europe/Rome'
+    volumes:
+      - /media/storage/data/authelia:/config
+    labels:
+      traefik.enable: true
+      traefik.http.routers.authelia.rule: Host(`auth.oliviero.xyz`)
+      traefik.http.routers.authelia.entrypoints: websecure
+      traefik.http.routers.authelia.tls: true
+      traefik.http.services.authelia.loadbalancer.server.port: 9091
+      traefik.docker.network: proxy-net
+
+      traefik.http.middlewares.authelia.forwardAuth.address: http://authelia:9091/api/verify?rd=https://auth.oliviero.xyz/
+      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
+      traefik.http.middlewares.authelia.forwardAuth.maxResponseBodySize: 8192
+      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: Remote-User,Remote-Groups,Remote-Email,Remote-Name
+
+networks:
+  proxy-net:
+    external: true

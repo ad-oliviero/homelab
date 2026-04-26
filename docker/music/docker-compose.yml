@@ -13,6 +13,9 @@ services:
       ND_DEFAULTTHEME: "Spotify-ish"
       ND_ENABLETRANSCODINGCONFIG: true
       ND_LASTFM_LANGUAGE: "it"
+
+      ND_EXTAUTH_TRUSTEDSOURCES: 0.0.0.0/0
+      ND_ENABLEUSEREDITING: false
     volumes:
       - /media/storage/data/navidrome:/data
       - /media/storage/data/music:/music:ro
@@ -22,6 +25,7 @@ services:
       traefik.http.routers.navidrome.entrypoints: websecure
       traefik.http.routers.navidrome.tls: true
       traefik.http.services.navidrome.loadbalancer.server.port: 4533
+      traefik.http.routers.navidrome.middlewares: authelia@docker
       traefik.docker.network: proxy-net
     networks:
       - proxy-net
