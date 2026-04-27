@@ -1,0 +1,17 @@
+cache-file: "/var/lib/ntfy/cache.db"
+attachment-cache-dir: "/var/cache/ntfy/attachments"
+
+auth-file: "/var/lib/ntfy/user.db"
+auth-default-access: "deny-all"
+
+
+# web-root: "disable"
+
+upstream-base-url: "https://ntfy.sh"
+
+enable-signup: false
+require-login: true
+enable-login: true
+enable-reservations: false
+
+global-topic-limit: 15000
