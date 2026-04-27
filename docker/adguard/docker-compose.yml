@@ -11,5 +11,5 @@ services:
     restart: unless-stopped
     volumes:
       - ${DATA_PATH}/adguard/db:/opt/adguardhome/work
-      - ${DATA_PATH}/adguard/data/conf:/opt/adguardhome/conf
-      - ${DATA_PATH}/adguard/data/certs:/opt/certs:ro
+      - ${DATA_PATH}/adguard/conf:/opt/adguardhome/conf
+      - ${DATA_PATH}/adguard/certs:/opt/certs:ro

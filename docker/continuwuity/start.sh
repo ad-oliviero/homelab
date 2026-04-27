@@ -3,6 +3,7 @@
 mkdir -p generated
 
 set -a
+source "$HOME/homelab/.env"
 source .env
 set +a
 
@@ -11,4 +12,4 @@ envsubst < livekit.template.yaml > generated/livekit.yaml
 envsubst < coturn.template.conf > generated/coturn.conf
 envsubst < element_config.template.json > generated/element_config.json
 
-sudo docker compose up -d
+sudo -E docker compose up -d

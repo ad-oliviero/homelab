@@ -7,7 +7,7 @@ services:
       - ./generated/continuwuity.toml:/etc/continuwuity.toml
     labels:
       traefik.enable: true
-      traefik.http.routers.continuwuity.rule: Host(`matrix.${DOMAIN}`)
+      traefik.http.routers.continuwuity.rule: Host(`matrix.${ROOT_DOMAIN}`)
       traefik.http.routers.continuwuity.entrypoints: websecure
       traefik.http.routers.continuwuity.tls: true
       traefik.http.routers.continuwuity.service: continuwuity
@@ -18,8 +18,8 @@ services:
     networks:
       - proxy-net
     environment:
-      CONTINUWUITY_ALLOW_CHECK_FOR_UPDATES: 'true'
-      CONDUWUIT_USER_DIRECTORY__SEARCH_ALL_USERS: true
+      CONTINUWUITY_ALLOW_CHECK_FOR_UPDATES: true
+      # CONDUWUIT_USER_DIRECTORY__SEARCH_ALL_USERS: true
       CONTINUWUITY_CONFIG: '/etc/continuwuity.toml'
     ulimits:
       nofile:
@@ -35,7 +35,7 @@ services:
         - continuwuity
     labels:
       traefik.enable: true
-      traefik.http.routers.element.rule: Host(`element.${DOMAIN}`)
+      traefik.http.routers.element.rule: Host(`element.${ROOT_DOMAIN}`)
       traefik.http.routers.element.entrypoints: websecure
       traefik.http.routers.element.tls: true
       traefik.http.services.element.loadbalancer.server.port: 80
@@ -56,7 +56,7 @@ services:
       - proxy-net
     labels:
       traefik.enable: true
-      traefik.http.routers.livekit.rule: Host(`livekit.${DOMAIN}`)
+      traefik.http.routers.livekit.rule: Host(`livekit.${ROOT_DOMAIN}`)
       traefik.http.routers.livekit.entrypoints: websecure
       traefik.http.routers.livekit.tls: true
       traefik.http.services.livekit.loadbalancer.server.port: 7880
@@ -64,13 +64,13 @@ services:
     image: ghcr.io/element-hq/lk-jwt-service:latest
     restart: unless-stopped
     environment:
-      - LIVEKIT_URL=wss://livekit.${DOMAIN}
+      - LIVEKIT_URL=wss://livekit.${ROOT_DOMAIN}
       - LIVEKIT_KEY=${LIVEKIT_KEY}
       - LIVEKIT_SECRET=${LIVEKIT_SECRET}
-      - LIVEKIT_FULL_ACCESS_HOMESERVERS=matrix.${DOMAIN}
+      - LIVEKIT_FULL_ACCESS_HOMESERVERS=matrix.${ROOT_DOMAIN}
     labels:
       traefik.enable: true
-      traefik.http.routers.livekit-jwt.rule: Host(`livekit.${DOMAIN}`) && (PathPrefix(`/sfu/get`) || PathPrefix(`/healthz`) || PathPrefix(`/get_token`))
+      traefik.http.routers.livekit-jwt.rule: Host(`livekit.${ROOT_DOMAIN}`) && (PathPrefix(`/sfu/get`) || PathPrefix(`/healthz`) || PathPrefix(`/get_token`))
       traefik.http.routers.livekit-jwt.entrypoints: websecure
       traefik.http.routers.livekit-jwt.tls: true
       traefik.http.services.livekit-jwt.loadbalancer.server.port: 8080
@@ -81,11 +81,11 @@ services:
     image: ghcr.io/element-hq/element-call:latest
     restart: unless-stopped
     environment:
-      PUBLIC_URL: "https://call.${DOMAIN}"
-      LIVEKIT_URL: "wss://livekit.${DOMAIN}"
+      PUBLIC_URL: "https://call.${ROOT_DOMAIN}"
+      LIVEKIT_URL: "wss://livekit.${ROOT_DOMAIN}"
     labels:
       traefik.enable: true
-      traefik.http.routers.call.rule: Host(`call.${DOMAIN}`)
+      traefik.http.routers.call.rule: Host(`call.${ROOT_DOMAIN}`)
       traefik.http.routers.call.entrypoints: websecure
       traefik.http.routers.call.tls: true
       traefik.http.services.call.loadbalancer.server.port: 8080

@@ -8,12 +8,12 @@ rtc:
   node_ip: "${PUBLIC_IP}"
   use_external_ip: true
   turn_servers:
-    - host: "turn.${DOMAIN}"
-      port: 3478
+    - host: "turn.${ROOT_DOMAIN}"
+      port: 3479
       protocol: udp
       secret: "${COTURN_AUTH_SECRET}"
-    - host: "turn.${DOMAIN}"
-      port: 3478
+    - host: "turn.${ROOT_DOMAIN}"
+      port: 3479
       protocol: tcp
       secret: "${COTURN_AUTH_SECRET}"
 
