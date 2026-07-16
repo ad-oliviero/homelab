@@ -1,6 +1,6 @@
 services:
   copyparty:
-    image: copyparty/im:latest
+    image: copyparty/iv:latest
     restart: always
     user: "1000:1000"
     volumes:
@@ -31,6 +31,41 @@ services:
       traefik.http.services.copyparty.loadbalancer.server.port: 3923
       traefik.http.middlewares.copyparty-real-ip.headers.customrequestheaders.X-Forwarded-Proto: https
       traefik.http.routers.copyparty.middlewares: copyparty-real-ip
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+  testparty:
+    image: copyparty/iv:latest
+    restart: always
+    user: "1000:1000"
+    volumes:
+      - ./cpp:/cfg:z
+      - ./example:/w:z
+
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+    environment:
+      LD_PRELOAD: /usr/lib/libmimalloc-secure.so
+      PYTHONUNBUFFERED: 1
+
+    stop_grace_period: 15s
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q 127.0.0.1:3923/?reset=/._"]
+      interval: 1m
+      timeout: 2s
+      retries: 5
+      start_period: 15s
+    labels:
+      traefik.enable: true
+      traefik.http.routers.testparty.rule: Host(`testfs.${DOMAIN}`)
+      traefik.http.routers.testparty.entrypoints: websecure
+      traefik.http.routers.testparty.tls: true
+      traefik.http.services.testparty.loadbalancer.server.port: 3923
+      traefik.http.middlewares.testparty-real-ip.headers.customrequestheaders.X-Forwarded-Proto: https
+      traefik.http.routers.testparty.middlewares: testparty-real-ip
       traefik.docker.network: proxy-net
     networks:
       - proxy-net
