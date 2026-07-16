@@ -2,13 +2,22 @@ services:
   open-webui:
     image: ghcr.io/open-webui/open-webui:latest
     volumes:
-      - ./data:/app/backend/data
-    ports:
-      - 3000:8080
+      - ${DATA_PATH}/webui:/app/backend/data
     environment:
       - AIOHTTP_CLIENT_TIMEOUT=6000
       - WEBUI_TIMEOUT=6000
-    extra_hosts:
-      - host.docker.internal:host-gateway
+      - THREAD_POOL_SIZE=2000
     restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.webui.rule: Host(`webui.${DOMAIN}`)
+      traefik.http.routers.webui.entrypoints: websecure
+      traefik.http.routers.webui.tls: true
+      traefik.http.services.webui.loadbalancer.server.port: 8080
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
 
+networks:
+  proxy-net:
+    external: true
