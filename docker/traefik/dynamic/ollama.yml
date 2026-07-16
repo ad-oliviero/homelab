@@ -6,12 +6,6 @@ http:
         - websecure
       tls: true
       service: ollama
-    webui:
-      rule: "Host(`webui.{{ env "DOMAIN" }}`)"
-      entryPoints:
-        - websecure
-      tls: true
-      service: webui
 
   services:
     ollama:
@@ -19,8 +13,3 @@ http:
         passHostHeader: true
         servers:
           - url: "http://192.168.1.120:11434"
-    webui:
-      loadBalancer:
-        passHostHeader: true
-        servers:
-          - url: "http://192.168.1.120:3000"
