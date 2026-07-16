@@ -1,0 +1,62 @@
+model_list:
+  - model_name: nvidia/glm-5.2
+    litellm_params:
+      custom_llm_provider: nvidia_nim
+      reasoning_effort: "medium"
+      rpm: 40
+      timeout: "120"
+      stream_timeout: "120"
+      litellm_credential_name: "Nvidia Nim"
+      use_in_pass_through: false
+      use_litellm_proxy: false
+      use_xai_oauth: false
+      merge_reasoning_content_in_choices: false
+      tags: []
+      model: z-ai/glm-5.2
+      guardrails: []
+      metadata: {}
+    model_info:
+      db_model: true
+      blocked: false
+      mode: chat
+      access_groups: []
+      direct_access: true
+      access_via_team_ids: []
+      max_tokens: 1000000
+      max_input_tokens: 1000000
+      supports_reasoning: true
+  - model_name: nvidia/minimax-m3
+    litellm_params:
+      custom_llm_provider: nvidia_nim
+      reasoning_effort: "medium"
+      rpm: 40
+      timeout: "120"
+      stream_timeout: "120"
+      litellm_credential_name: "Nvidia Nim"
+      use_in_pass_through: false
+      use_litellm_proxy: false
+      use_xai_oauth: false
+      merge_reasoning_content_in_choices: false
+      tags: []
+      model: minimaxai/minimax-m3
+      guardrails: []
+      metadata: {}
+    model_info:
+      db_model: true
+      blocked: false
+      mode: chat
+      access_groups: []
+      direct_access: true
+      access_via_team_ids: []
+      max_tokens: 1000000
+      max_input_tokens: 1000000
+      supports_reasoning: true
+
+router_settings:
+  allowed_fails: 3
+  num_retries: 8
+  cooldown_time: 60
+  retry_after: 15
+  fallbacks: # circular fallback, so whenever one of them is ready, it gets selected
+    - "nvidia/glm-5.2": ["nvidia/minimax-m3"]
+    - "nvidia/minimax-m3": ["nvidia/glm-5.2"]

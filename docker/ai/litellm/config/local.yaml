@@ -1,0 +1,16 @@
+model_list:
+  - model_name: prism-ml/Ternary-Bonsai-27B-mlx-2bit
+    litellm_params:
+      model: openai//Users/adri/Bonsai-demo/models/Ternary-Bonsai-27B-mlx-2bit
+      api_base: http://10.0.0.3:8081/v1
+      reasoning_effort: "max"
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+    model_info:
+      db_model: true
+      mode: chat
+      supports_vision: true
+      max_tokens: 8192
+      max_input_tokens: 32768
+      supports_reasoning: true
