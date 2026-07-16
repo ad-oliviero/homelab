@@ -1,0 +1,35 @@
+services:
+  searxng:
+    container_name: searxng_core
+    image: docker.io/searxng/searxng:${SEARXNG_VERSION:-latest}
+    volumes:
+      - ${DATA_PATH}/searxng:/etc/searxng
+      - searxng-cache:/var/cache/searxng
+    restart: always
+    labels:
+      traefik.enable: true
+      traefik.http.routers.searxng.rule: Host(`searxng.${DOMAIN}`)
+      traefik.http.routers.searxng.entrypoints: websecure
+      traefik.http.routers.searxng.tls: true
+      traefik.http.services.searxng.loadbalancer.server.port: 8080
+      traefik.docker.network: proxy-net
+    hostname: searxng
+    networks:
+      - proxy-net
+      - default
+
+  valkey:
+    container_name: searxng_valkey
+    image: docker.io/valkey/valkey:9-alpine
+    command: valkey-server --save 30 1 --loglevel warning
+    volumes:
+      - valkey-data:/data
+    restart: always
+
+volumes:
+  searxng-cache:
+  valkey-data:
+
+networks:
+  proxy-net:
+    external: true
