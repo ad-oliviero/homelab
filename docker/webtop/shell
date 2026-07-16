@@ -1,0 +1,4 @@
+#!/bin/env bash
+
+CONTAINER=$(sudo docker ps | grep webtop | awk '{ print $1 }')
+sudo -E docker exec --user abc -it $CONTAINER bash
