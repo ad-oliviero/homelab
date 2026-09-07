@@ -1,0 +1,26 @@
+services:
+  hbbs:
+    image: rustdesk/rustdesk-server:latest
+    container_name: rustdesk_hbbs
+    restart: always
+    network_mode: host
+    environment:
+      - ALWAYS_USE_RELAY=Y
+    command:
+      - hbbs
+      - -r
+      - ${NETBIRD_IP}:21117
+    volumes:
+      - ${DATA_PATH}/rustdesk:/root
+    depends_on:
+      - hbbr
+
+  hbbr:
+    image: rustdesk/rustdesk-server:latest
+    container_name: rustdesk_hbbr
+    restart: always
+    network_mode: host
+    command:
+      - hbbr
+    volumes:
+      - ${DATA_PATH}/rustdesk:/root
