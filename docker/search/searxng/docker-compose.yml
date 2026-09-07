@@ -1,10 +1,21 @@
 services:
   searxng:
     container_name: searxng_core
-    image: docker.io/searxng/searxng:${SEARXNG_VERSION:-latest}
+    image: docker.io/searxng/searxng:latest
+    depends_on:
+      - valkey
     volumes:
       - ${DATA_PATH}/searxng:/etc/searxng
       - searxng-cache:/var/cache/searxng
+    environment:
+      - SEARXNG_BASE_URL=https://searxng.${DOMAIN}/
+      - SEARXNG_VALKEY_URL=valkey://valkey:6379/0
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
     restart: always
     labels:
       traefik.enable: true
@@ -16,15 +27,17 @@ services:
     hostname: searxng
     networks:
       - proxy-net
-      - default
+      - searxng-net
 
   valkey:
     container_name: searxng_valkey
     image: docker.io/valkey/valkey:9-alpine
-    command: valkey-server --save 30 1 --loglevel warning
+    command: valkey-server --maxmemory 512mb --maxmemory-policy allkeys-lru --save ""
     volumes:
       - valkey-data:/data
     restart: always
+    networks:
+      - searxng-net
 
 volumes:
   searxng-cache:
@@ -33,3 +46,5 @@ volumes:
 networks:
   proxy-net:
     external: true
+  searxng-net:
+    driver: bridge
