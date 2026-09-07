@@ -1,0 +1,28 @@
+model_list:
+  - model_name: openrouter/deepseek-v4-flash
+    litellm_params:
+      custom_llm_provider: openrouter
+      model: openrouter/deepseek/deepseek-v4-flash-0731
+      reasoning_effort: "medium"
+      litellm_credential_name: "OpenRouter"
+      rpm: 500
+      timeout: "120"
+      stream_timeout: "120"
+      use_in_pass_through: false
+      use_litellm_proxy: false
+      use_xai_oauth: false
+      merge_reasoning_content_in_choices: false
+      tags: []
+      guardrails: []
+      metadata: {}
+    model_info:
+      db_model: true
+      blocked: false
+      mode: chat
+      access_groups: []
+      direct_access: true
+      access_via_team_ids: []
+      max_tokens: 384000
+      max_input_tokens: 1000000
+      supports_reasoning: true
+      supports_vision: false

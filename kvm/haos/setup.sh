@@ -7,10 +7,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 VM_NAME="haos"
-IMG_PATH="/media/storage/data/haos/haos.qcow2"
+IMG_PATH="/home/adri/storage/data/haos/haos.qcow2"
 IMG_DIR=$(dirname "$IMG_PATH")
 VARS_PATH="$IMG_DIR/haos_vars.fd"
 EFI_PATH="$IMG_DIR/haos_efi.fd"
+
+usermod -aG kvm adri
 
 if [ ! -f "$IMG_PATH" ]; then
     printf "$IMG_PATH not found\n"
@@ -30,10 +32,10 @@ if [ ! -f "$IMG_PATH" ]; then
     fi
 
     mkdir -p "$IMG_DIR"
-
     wget -O "${IMG_PATH}.xz" "$DL_URL"
-    
     unxz -f "${IMG_PATH}.xz"
+    
+    qemu-img resize "$IMG_PATH" +32G
 fi
 
 if [ ! -f "$EFI_PATH" ]; then
@@ -44,9 +46,7 @@ if [ ! -f "$VARS_PATH" ]; then
     truncate -s 64M "$VARS_PATH"
 fi
 
-
 chown -R adri:adri "$IMG_DIR"
-
 cp ./haos.service /etc/systemd/system/haos.service
 systemctl daemon-reload
 systemctl enable --now haos.service

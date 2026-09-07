@@ -1,0 +1,25 @@
+version: 1.2.1
+cache: true
+
+endpoints:
+  custom:
+    - name: 'LiteLLM'
+      apiKey: '${LITELLM_API_KEY}'
+      baseURL: 'http://litellm:4000/v1'
+      models:
+        default: ['zai/glm-5.2']
+        fetch: true
+      titleConvo: true
+      titleModel: 'zai/glm-4.5-flash'
+      summarize: false
+      summaryModel: 'zai/glm-4.5-flash'
+      modelDisplayLabel: 'LiteLLM'
+
+webSearch:
+  searchProvider: searxng
+  searxngInstanceUrl: '${SEARXNG_INSTANCE_URL}'
+  scraperProvider: firecrawl
+  firecrawlApiUrl: '${FIRECRAWL_API_URL}'
+  firecrawlApiKey: '${FIRECRAWL_API_KEY}'
+  rerankerType: jina
+  jinaApiKey: "${JINA_API_KEY}"

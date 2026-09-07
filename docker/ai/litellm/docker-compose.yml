@@ -1,0 +1,69 @@
+services:
+  litellm:
+    image: docker.litellm.ai/berriai/litellm:main-stable
+    volumes:
+     - ./config.yaml:/app/config.yaml
+     - ./config:/app/config
+    command:
+     - "--config=/app/config.yaml"
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - db
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      traefik.enable: true
+      traefik.http.routers.litellm.rule: Host(`litellm.${DOMAIN}`)
+      traefik.http.routers.litellm.entrypoints: websecure
+      traefik.http.routers.litellm.tls: true
+      traefik.http.services.litellm.loadbalancer.server.port: 4000
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+      - default
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    container_name: litellm_redis
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - default
+
+  db:
+    image: postgres:16
+    restart: always
+    container_name: litellm_db
+    env_file:
+      - .env
+    volumes:
+      - ${DBS_PATH}/litellm:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d litellm -U llmproxy"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  redis_data:
+
+networks:
+  proxy-net:
+    external: true

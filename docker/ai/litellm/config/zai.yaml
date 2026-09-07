@@ -1,0 +1,68 @@
+model_list:
+  - model_name: zai/glm-5.2
+    litellm_params:
+      custom_llm_provider: zai
+      model: glm-5.2
+      rpm: 40
+      timeout: "400"
+      stream_timeout: "400"
+      litellm_credential_name: "Z.AI"
+      use_in_pass_through: false
+      drop_params: true
+    model_info:
+      db_model: true
+      mode: chat
+      max_tokens: 128000
+      max_input_tokens: 1000000
+      supports_reasoning: true
+
+  - model_name: zai/glm-5.1
+    litellm_params:
+      custom_llm_provider: zai
+      model: glm-5.1
+      rpm: 40
+      timeout: "400"
+      stream_timeout: "400"
+      litellm_credential_name: "Z.AI"
+      use_in_pass_through: false
+      drop_params: true
+    model_info:
+      db_model: true
+      mode: chat
+      max_tokens: 128000
+      max_input_tokens: 200000
+      supports_reasoning: true
+
+  - model_name: zai/glm-5-turbo
+    litellm_params:
+      custom_llm_provider: zai
+      model: glm-5-turbo
+      rpm: 40
+      timeout: "400"
+      stream_timeout: "400"
+      litellm_credential_name: "Z.AI"
+      use_in_pass_through: false
+      drop_params: true
+    model_info:
+      db_model: true
+      mode: chat
+      max_tokens: 128000
+      max_input_tokens: 200000
+      supports_reasoning: true
+
+  - model_name: zai/glm-4.5-flash
+    litellm_params:
+      custom_llm_provider: zai
+      model: glm-4.5-flash
+      rpm: 40
+      timeout: "400"
+      stream_timeout: "400"
+      litellm_credential_name: "Z.AI"
+      use_in_pass_through: false
+      drop_params: true
+    model_info:
+      db_model: true
+      mode: chat
+      max_tokens: 128000
+      max_input_tokens: 128000
+      supports_reasoning: true

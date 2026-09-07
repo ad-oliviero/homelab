@@ -1,0 +1,90 @@
+services:
+  api:
+    image: registry.librechat.ai/danny-avila/librechat:latest
+    container_name: librechat
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3080
+      - MONGO_URI=mongodb://mongodb:27017/LibreChat
+      - MEILI_HOST=http://meilisearch:7700
+      - DOMAIN=${DOMAIN}
+      - DOMAIN_CLIENT=https://librechat.${DOMAIN}
+      - DOMAIN_SERVER=https://librechat.${DOMAIN}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+    volumes:
+      - ./librechat.yaml:/app/librechat.yaml
+      - ${DATA_PATH}/librechat/images:/app/client/public/images
+      - ${DATA_PATH}/librechat/uploads:/app/uploads
+      - ${DATA_PATH}/librechat/logs:/app/logs
+    labels:
+      traefik.enable: true
+      traefik.http.routers.librechat.rule: Host(`librechat.${DOMAIN}`)
+      traefik.http.routers.librechat.entrypoints: websecure
+      traefik.http.routers.librechat.tls: true
+      traefik.http.services.librechat.loadbalancer.server.port: 3080
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+      - default
+
+  mongodb:
+    image: mongo:8.0.20
+    container_name: librechat_mongodb
+    restart: always
+    command: mongod --noauth
+    volumes:
+      - ${DBS_PATH}/librechat:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --eval 'db.runCommand({ ping: 1 }).ok' --quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - default
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.35.1
+    container_name: librechat_meilisearch
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MEILI_NO_ANALYTICS=true
+    volumes:
+      - ${DATA_PATH}/librechat/meili_data:/meili_data
+    networks:
+      - default
+
+  admin-panel:
+    image: registry.librechat.ai/clickhouse/librechat-admin-panel:latest
+    container_name: librechat_admin_panel
+    restart: always
+    depends_on:
+      - api
+    environment:
+      - SESSION_SECRET=${ADMIN_PANEL_SESSION_SECRET}
+      - API_SERVER_URL=http://api:3080
+      - VITE_API_BASE_URL=https://librechat.${DOMAIN}
+      - SESSION_COOKIE_SECURE=true
+    labels:
+      traefik.enable: true
+      traefik.http.routers.librechat-admin.rule: Host(`librechat-admin.${DOMAIN}`)
+      traefik.http.routers.librechat-admin.entrypoints: websecure
+      traefik.http.routers.librechat-admin.tls: true
+      traefik.http.services.librechat-admin.loadbalancer.server.port: 3000
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+      - default
+
+networks:
+  proxy-net:
+    external: true

@@ -1,12 +1,15 @@
 services:
   lidarr:
-    image: lscr.io/linuxserver/lidarr:latest
+    image: ghcr.io/hotio/lidarr:pr-plugins
     environment:
       - PUID=1000
       - PGID=1000
+      - UMASK=002
+      - WEBUI_PORTS=8686/tcp
       - TZ=Etc/UTC
     volumes:
       - ${DATA_PATH}/lidarr/config:/config
+      - ${DATA_PATH}/lidarr/scripts:/scripts
       - ${DATA_PATH}/music:/music
       - ${DATA_PATH}/qbittorrent/downloads:/downloads
     restart: unless-stopped

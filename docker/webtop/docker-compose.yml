@@ -9,8 +9,7 @@ services:
     volumes:
       - ${STORAGE_PATH}:/data
       - ${DATA_PATH}/webtop:/config
-      - ${HOME}/dotfiles:/config/dotfiles:ro
-    shm_size: "2gb"
+    shm_size: "4gb"
     labels:
       traefik.enable: true
       traefik.http.routers.webtop.rule: Host(`webtop.${DOMAIN}`)

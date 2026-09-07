@@ -1,0 +1,66 @@
+model_list:
+  - model_name: kilo-auto/free
+    litellm_params:
+      litellm_credential_name: "Kilo Code"
+      model: openrouter/kilo-auto/free
+      timeout: "400"
+      stream_timeout: "400"
+    model_info:
+      mode: chat
+      max_tokens: 10000
+      max_input_tokens: 256000
+      supports_vision: false
+      supports_reasoning: true
+
+  - model_name: "kilo/laguna-s-2.1:free"
+    litellm_params:
+      litellm_credential_name: "Kilo Code"
+      model: openrouter/poolside/laguna-s-2.1:free
+      timeout: "400"
+      stream_timeout: "400"
+    model_info:
+      mode: chat
+      max_tokens: 32768
+      max_input_tokens: 262144
+      supports_vision: false
+      supports_reasoning: true
+
+  - model_name: "kilo/laguna-xs-2.1:free"
+    litellm_params:
+      litellm_credential_name: "Kilo Code"
+      model: openrouter/poolside/laguna-xs-2.1:free
+      timeout: "400"
+      stream_timeout: "400"
+    model_info:
+      mode: chat
+      max_tokens: 32768
+      max_input_tokens: 262144
+      supports_vision: false
+      supports_reasoning: true
+
+  - model_name: "kilo/nemotron-3-ultra-550b-a55b:free"
+    litellm_params:
+      litellm_credential_name: "Kilo Code"
+      model: openrouter/nvidia/nemotron-3-ultra-550b-a55b:free
+      timeout: "400"
+      stream_timeout: "400"
+    model_info:
+      mode: chat
+      max_tokens: 65536
+      max_input_tokens: 1000000
+      supports_vision: false
+      supports_reasoning: true
+
+  - model_name: "kilo/openrouter-free"
+    litellm_params:
+      litellm_credential_name: "Kilo Code"
+      model: openrouter/openrouter/free
+      timeout: "400"
+      stream_timeout: "400"
+    model_info:
+      mode: chat
+      max_tokens: 8192
+      max_input_tokens: 200000
+      supports_vision: true
+      supports_reasoning: true
+

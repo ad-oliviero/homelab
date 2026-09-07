@@ -1,0 +1,91 @@
+model_list:
+  - model_name: nvidia/kimi-k3
+    litellm_params:
+      custom_llm_provider: nvidia_nim
+      model: moonshotai/kimi-k3
+      reasoning_effort: "max"
+      rpm: 30
+      timeout: 120
+      stream_timeout: 120
+      litellm_credential_name: "Nvidia Nim"
+      use_in_pass_through: false
+      use_litellm_proxy: false
+      use_xai_oauth: false
+      merge_reasoning_content_in_choices: false
+      tags: []
+      guardrails: []
+      metadata: {}
+    model_info:
+      db_model: true
+      blocked: false
+      mode: chat
+      access_groups: []
+      direct_access: true
+      access_via_team_ids: []
+      max_tokens: 16384
+      max_input_tokens: 1048576
+      supports_reasoning: true
+      supports_vision: true
+
+  - model_name: nvidia/deepseek-v4-flash-0731
+    litellm_params:
+      custom_llm_provider: nvidia_nim
+      model: deepseek-ai/deepseek-v4-flash-0731
+      reasoning_effort: "high"
+      rpm: 30
+      timeout: 120
+      stream_timeout: 120
+      litellm_credential_name: "Nvidia Nim"
+      use_in_pass_through: false
+      use_litellm_proxy: false
+      use_xai_oauth: false
+      merge_reasoning_content_in_choices: false
+      tags: []
+      guardrails: []
+      metadata: {}
+    model_info:
+      db_model: true
+      blocked: false
+      mode: chat
+      access_groups: []
+      direct_access: true
+      access_via_team_ids: []
+      max_tokens: 16384
+      max_input_tokens: 1000000
+      supports_reasoning: true
+      supports_vision: false
+
+  - model_name: nvidia/deepseek-v4-pro-0813
+    litellm_params:
+      custom_llm_provider: nvidia_nim
+      model: deepseek-ai/deepseek-v4-pro-0813
+      reasoning_effort: "high"
+      rpm: 30
+      timeout: 120
+      stream_timeout: 120
+      litellm_credential_name: "Nvidia Nim"
+      use_in_pass_through: false
+      use_litellm_proxy: false
+      use_xai_oauth: false
+      merge_reasoning_content_in_choices: false
+      tags: []
+      guardrails: []
+      metadata: {}
+    model_info:
+      db_model: true
+      blocked: false
+      mode: chat
+      access_groups: []
+      direct_access: true
+      access_via_team_ids: []
+      max_tokens: 16384
+      max_input_tokens: 1000000
+      supports_reasoning: true
+      supports_vision: false
+
+router_settings:
+  allowed_fails: 3
+  num_retries: 3
+  cooldown_time: 60
+  retry_after: 5
+  enable_pre_call_checks: true

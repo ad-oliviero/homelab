@@ -5,7 +5,6 @@ services:
     volumes:
       - ${DATA_PATH}/immich:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
-      - ${EXTERNAL_LIBRARY_1}:/mnt/library
     env_file:
       - .env
     depends_on:
@@ -59,23 +58,6 @@ services:
     volumes:
       - ${DBS_PATH}/immich:/var/lib/postgresql/data
     restart: always
-
-  immich-folder-album-creator:
-    container_name: immich_folder_album_creator
-    image: salvoxia/immich-folder-album-creator:latest
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - ${EXTERNAL_LIBRARY_1}:/mnt/library
-    environment:
-      UNATTENDED: "1"
-      API_URL: https://immich.${DOMAIN}/api
-      API_KEY: ${IMMICH_FAC_API_KEY}
-      ROOT_PATH: /mnt/library
-      ALBUM_LEVELS: -1
-      ALBUM_SEPARATOR: " - "
-      CRON_EXPRESSION: "0 * * * *"
 
 volumes:
   model-cache:
