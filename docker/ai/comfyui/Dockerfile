@@ -14,6 +14,7 @@ RUN uv pip install --system --no-cache-dir torch torchvision torchaudio --index-
 WORKDIR /app
 RUN git clone https://github.com/Comfy-Org/ComfyUI.git .
 RUN uv pip install --system --no-cache-dir -r requirements.txt
+RUN uv pip install --system --no-cache-dir comfyui-manager opencv-python-headless matplotlib numba scikit-image
 
 EXPOSE 8188
 

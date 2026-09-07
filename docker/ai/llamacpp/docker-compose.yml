@@ -1,11 +1,8 @@
 services:
-  llamacpp:
+  llama-server:
     image: ghcr.io/ggml-org/llama.cpp:server-rocm
+    container_name: llama-server
     restart: unless-stopped
-    ipc: host
-    shm_size: '16gb'
-    volumes:
-      - ./data:/models
     devices:
       - /dev/dri
       - /dev/kfd
@@ -13,18 +10,31 @@ services:
       - HSA_OVERRIDE_GFX_VERSION=10.3.0
       - HSA_ENABLE_SDMA=0
       - HSA_DISABLE_FRAGMENT_ALLOCATOR=1
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/models:/models:ro
+      - ./data/hf-cache:/root/.cache/huggingface
     security_opt:
       - seccomp:unconfined
     group_add:
       - video
-    ports:
-      - 8080:8080
-    pull_policy: always
-    tty: true
+    ipc: host
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     command: >
+      --host 0.0.0.0 --port 8080
       --models-dir /models
-      --host 0.0.0.0
-      --port 8080
+      --models-autoload
+      -c 128000
+      --flash-attn on
+      --cache-type-k q4_0
+      --cache-type-v q4_0
+      -b 2048
+      -ub 512
+      --load-mode mmap
+      --jinja
+      --cont-batching
       --parallel 1
-      --models-max 1
-      --timeout 300

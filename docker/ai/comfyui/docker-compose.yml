@@ -8,7 +8,7 @@ services:
       - PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128,expandable_segments:True
       - PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128,expandable_segments:True
       - PYTORCH_ROCM_ARCH=gfx1032
-      - CLI_ARGS=--lowvram --force-fp16 --use-split-cross-attention
+      - CLI_ARGS=--lowvram --force-fp16 --use-split-cross-attention --enable-manager
     devices:
       - /dev/kfd:/dev/kfd
       - /dev/dri:/dev/dri
