@@ -1,0 +1,8 @@
+services:
+  gost:
+    image: ginuerzh/gost:latest
+    container_name: gost
+    restart: unless-stopped
+    ports:
+      - "${NETBIRD_IP}:1080:1080"
+    command: "-L http://:1080 -L socks5://:1081"
