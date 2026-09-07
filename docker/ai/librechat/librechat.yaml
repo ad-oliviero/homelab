@@ -21,3 +21,5 @@ webSearch:
   scraperProvider: firecrawl
   firecrawlApiUrl: '${FIRECRAWL_API_URL}'
   firecrawlApiKey: '${FIRECRAWL_API_KEY}'
+  rerankerType: jina
+  jinaApiKey: "${JINA_API_KEY}"

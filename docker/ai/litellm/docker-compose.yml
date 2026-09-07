@@ -8,6 +8,9 @@ services:
      - "--config=/app/config.yaml"
     env_file:
       - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       - db
     healthcheck:
@@ -29,6 +32,21 @@ services:
       - proxy-net
       - default
 
+  redis:
+    image: redis:7-alpine
+    restart: always
+    container_name: litellm_redis
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - default
+
   db:
     image: postgres:16
     restart: always
@@ -42,6 +60,9 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
+
+volumes:
+  redis_data:
 
 networks:
   proxy-net:

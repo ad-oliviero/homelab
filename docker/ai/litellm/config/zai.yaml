@@ -4,8 +4,8 @@ model_list:
       custom_llm_provider: zai
       model: glm-5.2
       rpm: 40
-      timeout: "120"
-      stream_timeout: "120"
+      timeout: "400"
+      stream_timeout: "400"
       litellm_credential_name: "Z.AI"
       use_in_pass_through: false
       drop_params: true
@@ -21,8 +21,8 @@ model_list:
       custom_llm_provider: zai
       model: glm-5.1
       rpm: 40
-      timeout: "120"
-      stream_timeout: "120"
+      timeout: "400"
+      stream_timeout: "400"
       litellm_credential_name: "Z.AI"
       use_in_pass_through: false
       drop_params: true
@@ -38,8 +38,8 @@ model_list:
       custom_llm_provider: zai
       model: glm-5-turbo
       rpm: 40
-      timeout: "120"
-      stream_timeout: "120"
+      timeout: "400"
+      stream_timeout: "400"
       litellm_credential_name: "Z.AI"
       use_in_pass_through: false
       drop_params: true
@@ -55,8 +55,8 @@ model_list:
       custom_llm_provider: zai
       model: glm-4.5-flash
       rpm: 40
-      timeout: "120"
-      stream_timeout: "120"
+      timeout: "400"
+      stream_timeout: "400"
       litellm_credential_name: "Z.AI"
       use_in_pass_through: false
       drop_params: true

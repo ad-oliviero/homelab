@@ -1,5 +1,69 @@
 model_list:
-  - model_name: prism-ml/Ternary-Bonsai-27B-mlx-2bit
+  - model_name: desk/gemma-4-e2b-q4
+    litellm_params:
+      model: openai/gemma-4-E2B-it-Q4_K_M
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/gemma4-26ba4b-huihui
+    litellm_params:
+      model: openai/Huihui-gemma-4-26B-A4B-it-qat-q4_0-unquantized-abliterated-Q4_K
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/mradermacher-gemma-4-26b-a4b
+    litellm_params:
+      model: openai/gemma-4-26B-A4B-it-abliterated.Q4_K_M
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/emperoai-qwythos-9b-q8_0
+    litellm_params:
+      model: openai/Qwythos-9B-Claude-Mythos-5-1M-MTP-Q8_0
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/unsloth-muse-glimmer-30b-q4
+    litellm_params:
+      model: openai/Muse-Glimmer-30B-UD-Q4_K_XL
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/unsloth-qwen3.8-27b
+    litellm_params:
+      model: openai/Qwen3.8-27B-UD-Q4_K_XL
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/naphula-mag-mell-r1-12b
+    litellm_params:
+      model: openai/MN-12B-Mag-Mell-R1-Uncensored-Q8_K_XL
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/xythick-mag-mell-r1-21b-q4
+    litellm_params:
+      model: openai/mag-mell-r1-uncensored-21b-q4_k_m
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+  - model_name: desk/xythick-mag-mell-r1-21b-q6
+    litellm_params:
+      model: openai/mag-mell-r1-uncensored-21b-q6_k
+      api_base: http://10.0.0.4:8080/v1
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+
+  - model_name: mac/Ternary-Bonsai-27B-mlx-2bit
     litellm_params:
       model: openai//Users/adri/Bonsai-demo/models/Ternary-Bonsai-27B-mlx-2bit
       api_base: http://10.0.0.3:8081/v1
@@ -14,3 +78,20 @@ model_list:
       max_tokens: 8192
       max_input_tokens: 32768
       supports_reasoning: true
+  - model_name: mac/vibethinker-3b
+    litellm_params:
+      model: openai/WeiboAI/VibeThinker-3B
+      api_base: http://10.0.0.3:8080/v1
+      reasoning_effort: "max"
+      api_key: "none"
+      timeout: "1200"
+      stream_timeout: "1200"
+    model_info:
+      db_model: true
+      mode: chat
+      supports_vision: false
+      max_tokens: 102400
+      max_input_tokens: 65536
+      supports_reasoning: true
+      supports_function_calling: false
+      supports_tool_choice: false
