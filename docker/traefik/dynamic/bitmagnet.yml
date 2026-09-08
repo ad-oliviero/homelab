@@ -1,0 +1,15 @@
+http:
+  routers:
+    bitmagnet:
+      rule: "Host(`bitmagnet.{{ env "DOMAIN" }}`)"
+      entryPoints:
+        - websecure
+      tls: true
+      service: bitmagnet
+
+  services:
+    bitmagnet:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://10.0.0.5:3333"

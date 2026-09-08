@@ -1,0 +1,15 @@
+http:
+  routers:
+    immich:
+      rule: "Host(`immich.{{ env "DOMAIN" }}`)"
+      entryPoints:
+        - websecure
+      tls: true
+      service: immich
+
+  services:
+    immich:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          - url: "http://10.0.0.5:2283"
