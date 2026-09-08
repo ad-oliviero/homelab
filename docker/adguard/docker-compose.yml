@@ -1,7 +1,6 @@
 services:
   adguardhome:
     ports:
-      - "3000:3000"
       - 53:53/tcp
       - 53:53/udp
       - 853:853/tcp
@@ -13,3 +12,16 @@ services:
       - ${DATA_PATH}/adguard/db:/opt/adguardhome/work
       - ${DATA_PATH}/adguard/conf:/opt/adguardhome/conf
       - ${DATA_PATH}/adguard/certs:/opt/certs:ro
+    labels:
+      traefik.enable: true
+      traefik.http.routers.adguard.rule: Host(`adguard.${DOMAIN}`)
+      traefik.http.routers.adguard.entrypoints: websecure
+      traefik.http.routers.adguard.tls: true
+      traefik.http.services.adguard.loadbalancer.server.port: 3000
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    external: true
