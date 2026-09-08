@@ -1,0 +1,29 @@
+services:
+  emqx:
+    image: emqx/emqx-enterprise:latest
+    container_name: emqx
+    environment:
+    - EMQX_NODE_NAME=emqx@emqx.${ROOT_DOMAIN}
+    # - "EMQX_FEATURES=dashboard,metrics,plugins"
+    healthcheck:
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    networks:
+      emqx-bridge:
+        aliases:
+        - emqx.oliviero.xyz
+    ports:
+      - 1883:1883
+      - 8083:8083
+      - 8084:8084
+      - 8883:8883
+      - 18083:18083
+    volumes:
+      - ${DATA_PATH}/emqx/data:/opt/emqx/data
+      - ${DATA_PATH}/emqx/log:/opt/emqx/log
+
+networks:
+  emqx-bridge:
+    driver: bridge
