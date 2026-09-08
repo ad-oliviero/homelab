@@ -29,6 +29,7 @@ services:
       traefik.http.routers.wakapi.entrypoints: websecure
       traefik.http.routers.wakapi.tls: true
       traefik.http.services.wakapi.loadbalancer.server.port: 3000
+      traefik.docker.network: proxy-net
     networks:
       - proxy-net
       - default
