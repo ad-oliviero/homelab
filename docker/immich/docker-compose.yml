@@ -13,16 +13,18 @@ services:
     restart: always
     healthcheck:
       disable: false
-    labels:
-      traefik.enable: true
-      traefik.http.routers.immich.rule: Host(`immich.${DOMAIN}`)
-      traefik.http.routers.immich.entrypoints: websecure
-      traefik.http.routers.immich.tls: true
-      traefik.http.services.immich.loadbalancer.server.port: 2283
-      traefik.docker.network: proxy-net
+    ports:
+      - 2283:2283
+    # labels:
+    #   traefik.enable: true
+    #   traefik.http.routers.immich.rule: Host(`immich.${DOMAIN}`)
+    #   traefik.http.routers.immich.entrypoints: websecure
+    #   traefik.http.routers.immich.tls: true
+    #   traefik.http.services.immich.loadbalancer.server.port: 2283
+    #   traefik.docker.network: proxy-net
     hostname: immich
     networks:
-      - proxy-net
+      #- proxy-net
       - default
 
   immich-machine-learning:
@@ -62,7 +64,7 @@ services:
 volumes:
   model-cache:
 networks:
-  proxy-net:
-    external: true
+  # proxy-net:
+  #   external: true
   immich-internet:
     driver: bridge
