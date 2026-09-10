@@ -1,0 +1,50 @@
+services:
+  web:
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    restart: unless-stopped
+    volumes:
+      - ${DATA_PATH}/karakeep:/data
+    env_file:
+      - .env
+    environment:
+      MEILI_ADDR: http://meilisearch:7700
+      BROWSER_WEB_URL: http://chrome:9222
+      # OPENAI_API_KEY: ...
+
+      DATA_DIR: /data
+    labels:
+      traefik.enable: true
+      traefik.http.routers.karakeep.rule: Host(`karakeep.${DOMAIN}`)
+      traefik.http.routers.karakeep.entrypoints: websecure
+      traefik.http.routers.karakeep.tls: true
+      traefik.http.services.karakeep.loadbalancer.server.port: 3000
+      traefik.docker.network: proxy-net
+    networks:
+      - proxy-net
+      - default
+  chrome:
+    image: ghcr.io/karakeep-app/karakeep-chrome:release
+    restart: unless-stopped
+    init: true
+    command:
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --hide-scrollbars
+      - --disable-blink-features=AutomationControlled
+      - --window-size=1440,900
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.41.0
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - meilisearch:/meili_data
+
+volumes:
+  meilisearch:
+networks:
+  proxy-net:
+    external: true
