@@ -1,0 +1,25 @@
+#- targets:
+#    - 'authelia:9959'
+#  labels:
+#    job: authelia
+#    category: apps
+#    instance: authelia
+
+#- targets:
+#    - 'gitea:3000'
+#  labels:
+#    job: gitea
+#    category: apps
+#    instance: gitea
+
+- targets: ['10.0.0.5:8081']
+  labels:
+    job: immich_api
+    category: apps
+    instance: immich
+
+- targets: ['10.0.0.5:8082']
+  labels:
+    job: immich_microservices
+    category: apps
+    instance: immich

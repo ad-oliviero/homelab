@@ -19,6 +19,8 @@ litellm_settings:
   #   type: redis
   #   host: localhost
   #   port: 6379
+  require_auth_for_metrics_endpoint: false
+  callbacks: ["prometheus"]
 
 general_settings:
   master_key: ${LITELLM_MASTER_KEY}

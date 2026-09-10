@@ -1,0 +1,13 @@
+- targets:
+    - '10.0.0.5:3333'
+  labels:
+    job: bitmagnet
+    category: media
+    instance: bitmagnet
+
+# - targets:
+#     - 'ntfy:80'
+#   labels:
+#     job: ntfy
+#     category: media
+#     instance: ntfy

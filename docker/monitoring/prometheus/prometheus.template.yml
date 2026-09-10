@@ -1,0 +1,134 @@
+global:
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  evaluation_interval: 30s
+  external_labels:
+    monitor: homelab
+    env: production
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+rule_files:
+  # - "rules/*.yml"
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: alertmanager
+    static_configs:
+      - targets: ['alertmanager:9093']
+
+  - job_name: wakapi
+    metrics_path: /api/metrics
+    bearer_token_file: /run/secrets/wakapi_token
+    static_configs:
+      - targets: ['wakapi:3000']
+
+  - job_name: litellm
+    scheme: https
+    static_configs:
+      - targets: ['litellm.srv.${DOMAIN}']
+    authorization:
+      credentials_file: /run/secrets/litellm_key
+
+  - job_name: syncthing
+    static_configs:
+      - targets: ['10.0.0.2:8384']
+    metrics_path: /metrics
+    http_headers:
+      X-API-Key:
+        files:
+          - /run/secrets/syncthing_key
+
+  - job_name: searxng
+    scheme: https
+    static_configs:
+      - targets: ['searxng.srv.${DOMAIN}']
+    metrics_path: /metrics
+    basic_auth:
+      username: prometheus
+      password_file: /run/secrets/searxng_metrics_password
+
+  # - job_name: emqx
+  #   scheme: https
+  #   static_configs:
+  #     - targets: ['emqx.srv.${DOMAIN}']
+  #   metrics_path: /api/v5/prometheus/stats
+  #   basic_auth:
+  #   username: your_api_key
+  #   password_file: /run/secrets/emqx_api_secret
+
+  # - job_name: authelia
+  #   static_configs:
+  #     - targets: ['authelia:9959']
+  #       labels:
+  #         category: apps
+  #         instance: authelia
+
+  # - job_name: gitea
+  #   static_configs:
+  #     - targets: ['gitea:3000']
+  #       labels:
+  #         category: apps
+  #         instance: gitea
+
+  - job_name: immich_api
+    static_configs:
+      - targets: ['10.0.0.5:8081']
+        labels:
+          category: apps
+          instance: immich
+
+  - job_name: immich_microservices
+    static_configs:
+      - targets: ['10.0.0.5:8082']
+        labels:
+          category: apps
+          instance: immich
+
+  - job_name: node-exporter
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          category: infrastructure
+          instance: main-node
+
+  - job_name: cadvisor
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          category: infrastructure
+          instance: main-node
+
+  - job_name: traefik
+    static_configs:
+      - targets: ['traefik:8080']
+        labels:
+          category: infrastructure
+          instance: main-node
+
+  - job_name: bitmagnet
+    static_configs:
+      - targets: ['10.0.0.5:3333']
+        labels:
+          category: media
+          instance: bitmagnet
+
+  # - job_name: ntfy
+  #   static_configs:
+  #     - targets: ['ntfy:80']
+  #       labels:
+  #         category: media
+  #         instance: ntfy
+
+  # - job_name: garage
+  #   static_configs:
+  #     - targets: ['garage:3903']
+  #       labels:
+  #         category: storage
+  #         instance: garage

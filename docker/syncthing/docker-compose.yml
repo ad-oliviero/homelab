@@ -1,4 +1,14 @@
 services:
+  syncthing-exporter:
+    image: f100024/syncthing_exporter:latest
+    container_name: syncthing-exporter
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SYNCTHING_URI: "http://syncthing:8384/"
+    networks:
+      - default
   syncthing:
     image: lscr.io/linuxserver/syncthing:latest
     container_name: syncthing

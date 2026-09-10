@@ -1,0 +1,90 @@
+secrets:
+  litellm_key:
+    file: ./secrets/litellm_key
+  emqx_key:
+    file: ./secrets/emqx_key
+  wakapi_token:
+    file: ./secrets/wakapi_token
+  syncthing_key:
+    file: ./secrets/syncthing_key
+  searxng_metrics_password:
+    file: ./secrets/searxng_metrics_password
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    secrets:
+      - litellm_key
+      - emqx_key
+      - wakapi_token
+      - syncthing_key
+      - searxng_metrics_password
+    user: "1000:1000"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+      - '--web.external-url=https://prometheus.${DOMAIN}'
+      # - '--log.level=debug'
+    volumes:
+      - ./generated/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${DBS_PATH}/prometheus:/prometheus
+    networks:
+      - proxy-net
+      - monitoring-net
+      - prometheus-internet
+    labels:
+      traefik.enable: true
+      traefik.http.routers.prometheus.rule: Host(`prometheus.${DOMAIN}`)
+      traefik.http.routers.prometheus.entrypoints: websecure
+      traefik.http.routers.prometheus.tls: true
+      traefik.http.services.prometheus.loadbalancer.server.port: 9090
+      # traefik.http.routers.prometheus.middlewares: authelia@docker
+      traefik.docker.network: proxy-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    restart: unless-stopped
+    user: "1000:1000"
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=https://alertmanager.${DOMAIN}'
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ${DBS_PATH}/alertmanager:/alertmanager
+    networks:
+      - proxy-net
+    labels:
+      traefik.enable: true
+      traefik.http.routers.alertmanager.rule: Host(`alertmanager.${DOMAIN}`)
+      traefik.http.routers.alertmanager.entrypoints: websecure
+      traefik.http.routers.alertmanager.tls: true
+      traefik.http.services.alertmanager.loadbalancer.server.port: 9093
+      # traefik.http.routers.alertmanager.middlewares: authelia@docker
+      traefik.docker.network: proxy-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  proxy-net:
+    external: true
+  monitoring-net:
+    external: true
+  prometheus-internet:
+    driver: bridge

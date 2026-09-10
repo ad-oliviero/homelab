@@ -7,6 +7,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env
+    environment:
+      - IMMICH_TELEMETRY_INCLUDE=all
     depends_on:
       - redis
       - database
@@ -15,6 +17,8 @@ services:
       disable: false
     ports:
       - 2283:2283
+      - 8081:8081
+      - 8082:8082
     # labels:
     #   traefik.enable: true
     #   traefik.http.routers.immich.rule: Host(`immich.${DOMAIN}`)
